@@ -208,55 +208,47 @@ function processBotResponse(text) {
         }
     }
 
-    // --- CALCULATION: Alcohol / Wine ---
-    const alcoholMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר|שמיניה|שישיה|בקבוק)/);
-    if (query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה') || query.includes('ערק') || query.includes('בירה') || query.includes('בקבוק') || query.includes('ליטר')) {
+    // --- CALCULATION: Alcohol / Perfume / Bottles ---
+    const quantityMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר|שמיניה|שישיה|בקבוק|יחידות|מ"ל)/);
+    const hasAlcoholKeyword = query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה') || query.includes('ערק') || query.includes('בירה');
+    const hasPerfumeKeyword = query.includes('בושם') || query.includes('בשמים');
+    const hasBottleKeyword = query.includes('בקבוק') || query.includes('ליטר');
+
+    if (hasAlcoholKeyword || hasPerfumeKeyword || hasBottleKeyword) {
         isCustomQuery = true;
-        const amount = alcoholMatch ? parseInt(alcoholMatch[1]) : 0;
-        const isWineOnly = (query.includes('יין') || query.includes('בירה')) && !query.includes('חריף') && !query.includes('וויסקי') && !query.includes('ודקה');
-        const limitPerPerson = isWineOnly ? 2 : 1;
+        const amount = quantityMatch ? parseInt(quantityMatch[1]) : 0;
+        let adviceChunks = [];
+
+        // Case A: Alcohol (Spirits vs Wine)
+        if (hasAlcoholKeyword || hasBottleKeyword) {
+            let alcoholAdvice = `🍷 <strong>במידה ומדובר באלכוהול:</strong><br>`;
+            alcoholAdvice += `• <strong>יין/בירה:</strong> עד 2 ליטר לנוסע בודד (מעל גיל 18).<br>`;
+            alcoholAdvice += `• <strong>משקה חריף (וויסקי וכד'):</strong> עד 1 ליטר לנוסע בודד.`;
+            if (numPeople > 1) {
+                alcoholAdvice += `<br>⚠️ <strong>לתשומת לבכם:</strong> לכל אחד מ-${numPeople} האנשים יש מכסה אישית. <strong>חל איסור על איחוד פטורים.</strong> כל אחד חייב לשאת את הכמות שלו בנפרד.`;
+            }
+            // Logic for Red Path
+            const isWineOnly = (query.includes('יין') || query.includes('בירה')) && !query.includes('חריף') && !query.includes('וויסקי') && !query.includes('ודקה');
+            const limit = isWineOnly ? 2 : 1;
+            if (amount > limit) needsRedPath = true;
+            adviceChunks.push(alcoholAdvice);
+        }
+
+        // Case B: Perfume
+        if (hasPerfumeKeyword || (hasBottleKeyword && !hasAlcoholKeyword)) {
+            let perfumeAdvice = `✨ <strong>במידה ומדובר בבשמים:</strong><br>`;
+            perfumeAdvice += `• הפטור הוא עד <strong>250 מ"ל</strong> (רבע ליטר) לנוסע בודד.<br>`;
+            if (numPeople > 1) {
+                perfumeAdvice += `⚠️ <strong>לתשומת לבכם:</strong> עבור ${numPeople} אנשים, לא ניתן לאחד את הפטורים עבור בקבוק אחד גדול או כמות מרוכזת.`;
+            }
+            if (amount > 0 && amount > 1) needsRedPath = true; // Most perfume bottles are around 100ml, if amount > 1 bottle it might exceed 250ml or require splitting
+            adviceChunks.push(perfumeAdvice);
+        }
 
         if (amount > 0) {
-            if (numPeople > 1) {
-                const totalAllowedIfSplit = numPeople * limitPerPerson;
-                let poolingAdvice = `🍷 <strong>אלכוהול (קבוצתי):</strong> ציינת ${amount} בקבוקים/ליטר עבור ${numPeople} אנשים. <br>`;
-                poolingAdvice += `🛑 <strong>הכלל הקובע:</strong> הפטור הוא אישי בלבד - <strong>${limitPerPerson} ליטר לנוסע אחד</strong>. <br>`;
-                poolingAdvice += `⚠️ <strong>חל איסור על איחוד פטורים:</strong> גם אם הכמות הכוללת מתאימה למספר האנשים, אסור לאדם אחד לשאת את כל הכמות בתיק שלו. כדי ליהנות מהפטור, על כל נוסע לשאת את הכמות המותרת לו בנפרד.`;
-
-                warnings.push(poolingAdvice);
-
-                // If carrying more than the individual limit in one declaration
-                if (amount > limitPerPerson) {
-                    needsRedPath = true;
-                }
-            } else {
-                if (amount > limitPerPerson) {
-                    warnings.push(`🍷 <strong>אלכוהול:</strong> חרגת מהמכסה המותרת (${limitPerPerson} ליטר). <br><span style="color:#C53030; font-weight:bold;">↳ חובה לעבור במסלול האדום ולשלם מס על החריגה.</span>`);
-                    needsRedPath = true;
-                } else {
-                    warnings.push(`🍷 <strong>אלכוהול:</strong> הכמות שציינת נמצאת בתוך הפטור האישי.`);
-                }
-            }
+            warnings.push(`🧴 <strong>ניתוח עבור ${amount} יחידות:</strong><br><br>` + adviceChunks.join('<br><br>'));
         } else {
-            // General "How much" question
-            warnings.push(`🍷 <strong>מכסת אלכוהול:</strong> הפטור הוא <strong>אישי בלבד</strong>: עד 2 ליטר יין/בירה <b>או</b> 1 ליטר משקה חריף לכל נוסע בנפרד (מעל גיל 18). <br>💡 עבור ${numPeople} אנשים, לכל אחד יש את המכסה האישית שלו. <strong>אין אפשרות לאחד את המכסות יחד עבור מוצר אחד או כמות מרוכזת.</strong>`);
-        }
-    }
-
-    // --- CALCULATION: Perfume ---
-    const perfumeMatch = query.match(/(\d+)\s*(מ"ל|בקבוקים|בקבוק)/);
-    if (query.includes('בושם') || query.includes('בשמים')) {
-        isCustomQuery = true;
-        const amountMl = perfumeMatch ? parseInt(perfumeMatch[1]) : 0;
-        if (amountMl > 0) {
-            if (amountMl > 250) {
-                warnings.push(`✨ <strong>בשמים:</strong> הכמות שציינת (${amountMl} מ"ל) חורגת מהפטור האישי של 250 מ"ל לנוסע. <br>⚠️ <strong>שימו לב:</strong> לא ניתן לאחד פטורים של כמה אנשים עבור בקבוק אחד גדול או כמות כוללת.`);
-                needsRedPath = true;
-            } else {
-                warnings.push(`✨ <strong>בשמים:</strong> ${amountMl} מ"ל נמצא בתוך הפטור האישי.`);
-            }
-        } else {
-            warnings.push(`✨ <strong>מכסת בשמים:</strong> הפטור הוא <strong>אישי בלבד</strong>: עד 250 מ"ל (רבע ליטר) של בושם או מי קולון לכל נוסע. <br>💡 עבור ${numPeople} אנשים, לכל אחד יש זכאות אישית נפרדת. <strong>אסור לאחד פטורים או לצרף זכויות של כמה אנשים יחד.</strong>`);
+            warnings.push(`🧴 <strong>מידע על מכסות בקבוקים:</strong><br><br>` + adviceChunks.join('<br><br>'));
         }
     }
 
