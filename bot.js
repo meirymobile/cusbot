@@ -161,6 +161,26 @@ function sendUserMsg() {
     }
 }
 
+// --- Food and Agriculture Dictionaries ---
+const foodDictionaries = {
+    prohibited: {
+        keywords: /בשר|עוף|חלב|גבינ|ביצ|סטייק|נקניק|חמאה|יוגורט|דג|פירות ים|סלמי|פסטרמה/,
+        message: "🥩🥛 <strong>בשר, חלב ומוצרים מהחי:</strong> חל איסור מוחלט להכניס מוצרי בשר ומוצרי חלב מחו\"ל ללא היתר משרד החקלאות ומשרד הבריאות. פריטים אלו עלולים להיות מוחרמים."
+    },
+    fresh: {
+        keywords: /פירות|ירקות|תפוח|בננה|עגבני|מלפפון|לימון|תפוז|אפרסק|אגס|ענבים|פרי|צמח|פרחים/,
+        message: "🍏🍅 <strong>תוצרת חקלאית טרייה:</strong> חל איסור מוחלט על הכנסת פירות וירקות טריים לישראל (כדי למנוע הכנסת מזיקים). פריטים אלו יוחרמו בכניסה."
+    },
+    dry: {
+        keywords: /שוקולד|פסטה|אגוז|קדשיו|שקדים|קפה|תה|שימורים|שמן|דבש|סוכר|עוגיות|ממתקים|חלווה|בורגול|אורז|פסטה/,
+        limitMsg: "📦 <strong>מזון יבש ומעובד:</strong> מותר להביא עד 3 ק\"ג סך הכל, ועד 1 ק\"ג לכל סוג מזון בודד."
+    },
+    spices: {
+        keywords: /תבלין|פלפל|זעתר|פפריקה|כמון|מלח|כורכום|קינמון|חוואיג|סומק/,
+        limitMsg: "🌶️ <strong>תבלינים:</strong> מותר להביא עד 1 ק\"ג תבלינים במצטבר."
+    }
+};
+
 function processBotResponse(text) {
     const query = text.toLowerCase();
     let response = '';
@@ -171,7 +191,7 @@ function processBotResponse(text) {
     let needsRedPath = false;
 
     // --- Core Keywords for broad detection ---
-    const productKeywords = /חולצ|מכנס|נעל|בגד|פריט|בקבוק|ליטר|יין|אלכוהול|ודקה|וויסקי|ערק|בירה|בושם|בשמים|מ"ל|פאקט|סיגרי|טבק|vape|שואב|דייסון|dyson|מחשב|לפטופ|טלפון|סמארטפון|אייפון|iphone|טאבלט|אייפד|ipad|קונסול|פלייסטיישן|xbox|טלוויזיה|שעון|תיק|אוזניות|מצלמה/;
+    const productKeywords = /חולצ|מכנס|נעל|בגד|פריט|בקבוק|ליטר|יין|אלכוהול|ודקה|וויסקי|ערק|בירה|בושם|בשמים|מ"ל|פאקט|סיגרי|טבק|vape|שואב|דייסון|dyson|מחשב|לפטופ|טלפון|סמארטפון|אייפון|iphone|טאבלט|אייפד|ipad|קונסול|פלייסטיישן|xbox|טלוויזיה|שעון|תיק|אוזניות|מצלמה|בשר|חלב|גבינ|פירות|ירקות|מזון|שוקולד|תבלין/;
 
     if (productKeywords.test(query) || query.includes('כמה') || query.includes('מחיר') || query.includes('עולה') || query.includes('מותר')) {
         isCustomQuery = true;
@@ -325,6 +345,50 @@ function processBotResponse(text) {
         } else {
             // General "How many" question
             warnings.push(`👕 <strong>כמות בגדים ונעליים:</strong> אין מספר מוחלט בחוק, אך הכלל הוא <strong>"כמות סבירה לשימוש אישי"</strong>. <br>💡 <strong>טיפ:</strong> הבאת מעל 10-12 פריטים זהים (למשל 12 חולצות מאותו סוג) עלולה להיחשב כייבוא מסחרי ולחייב תשלום מס ומעבר במסלול האדום להצהרה.`);
+        }
+    }
+
+    // --- CALCULATION: Food & Agriculture ---
+    const foodKeywords = /מזון|אוכל|בשר|חלב|גבינ|פירות|ירקות|תבלין|שוקולד|קילו|ק"ג/;
+    if (foodKeywords.test(query)) {
+        isCustomQuery = true;
+        let foodAdvice = [];
+        const weightMatch = query.match(/(\d+)/);
+        const weight = weightMatch ? parseInt(weightMatch[1]) : 0;
+
+        // Prohibited Items Check
+        if (foodDictionaries.prohibited.keywords.test(query)) {
+            foodAdvice.push(foodDictionaries.prohibited.message);
+            needsRedPath = true;
+        }
+
+        // Fresh Produce Check
+        if (foodDictionaries.fresh.keywords.test(query)) {
+            foodAdvice.push(foodDictionaries.fresh.message);
+            needsRedPath = true;
+        }
+
+        // Dry Food and Spices Check
+        if (foodDictionaries.dry.keywords.test(query) || query.includes('מזון') || query.includes('אוכל')) {
+            let msg = foodDictionaries.dry.limitMsg;
+            if (weight > 1) {
+                msg += `<br>⚠️ <strong>שים לב:</strong> ציינת ${weight} ק"ג. החריגה מ-1 ק"ג לסוג בודד מחייבת הגעה למסלול האדום להצהרה ותשלום מס.`;
+                needsRedPath = true;
+            }
+            foodAdvice.push(msg);
+        }
+
+        if (foodDictionaries.spices.keywords.test(query)) {
+            let msg = foodDictionaries.spices.limitMsg;
+            if (weight > 1) {
+                msg += `<br>⚠️ <strong>שים לב:</strong> ציינת ${weight} ק"ג תבלינים. המכסה היא 1 ק"ג בלבד. החריגה מחייבת הגעה למסלול האדום.`;
+                needsRedPath = true;
+            }
+            foodAdvice.push(msg);
+        }
+
+        if (foodAdvice.length > 0) {
+            warnings.push(`🍎 <strong>ניתוח מוצרי מזון וחקלאות:</strong><br><br>` + foodAdvice.join('<br><br>'));
         }
     }
 
