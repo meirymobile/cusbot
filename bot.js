@@ -209,8 +209,8 @@ function processBotResponse(text) {
     }
 
     // --- CALCULATION: Alcohol / Wine ---
-    const alcoholMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר)/);
-    if (query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה') || query.includes('ערק') || query.includes('בירה')) {
+    const alcoholMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר|שמיניה|שישיה|בקבוק)/);
+    if (query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה') || query.includes('ערק') || query.includes('בירה') || query.includes('בקבוק') || query.includes('ליטר')) {
         isCustomQuery = true;
         const amount = alcoholMatch ? parseInt(alcoholMatch[1]) : 0;
         const isWineOnly = (query.includes('יין') || query.includes('בירה')) && !query.includes('חריף') && !query.includes('וויסקי') && !query.includes('ודקה');
@@ -218,8 +218,17 @@ function processBotResponse(text) {
 
         if (amount > 0) {
             if (numPeople > 1) {
-                warnings.push(`🍷 <strong>אלכוהול:</strong> לכל אחד מ-${numPeople} הנוסעים (מעל גיל 18) יש פטור אישי של ${limitPerPerson} ליטר. <br>⚠️ <strong>אסור לאחד פטורים:</strong> לא ניתן לצרף את הזכויות שלכם כדי להביא בקבוק אחד גדול או כמות מרוכזת. כל נוסע חייב לשאת את הכמות שלו בנפרד בכבודתו.`);
-                if (amount > limitPerPerson) needsRedPath = true;
+                const totalAllowedIfSplit = numPeople * limitPerPerson;
+                let poolingAdvice = `🍷 <strong>אלכוהול (קבוצתי):</strong> ציינת ${amount} בקבוקים/ליטר עבור ${numPeople} אנשים. <br>`;
+                poolingAdvice += `🛑 <strong>הכלל הקובע:</strong> הפטור הוא אישי בלבד - <strong>${limitPerPerson} ליטר לנוסע אחד</strong>. <br>`;
+                poolingAdvice += `⚠️ <strong>חל איסור על איחוד פטורים:</strong> גם אם הכמות הכוללת מתאימה למספר האנשים, אסור לאדם אחד לשאת את כל הכמות בתיק שלו. כדי ליהנות מהפטור, על כל נוסע לשאת את הכמות המותרת לו בנפרד.`;
+
+                warnings.push(poolingAdvice);
+
+                // If carrying more than the individual limit in one declaration
+                if (amount > limitPerPerson) {
+                    needsRedPath = true;
+                }
             } else {
                 if (amount > limitPerPerson) {
                     warnings.push(`🍷 <strong>אלכוהול:</strong> חרגת מהמכסה המותרת (${limitPerPerson} ליטר). <br><span style="color:#C53030; font-weight:bold;">↳ חובה לעבור במסלול האדום ולשלם מס על החריגה.</span>`);
