@@ -194,7 +194,7 @@ function processBotResponse(text) {
         }
 
         if (numPeople > 1) {
-            warnings.push(`🚬 <strong>סיגריות וטבק:</strong> הפטור הוא <strong>אישי בלבד</strong> (פאקט 1 או 250 גרם טבק לנוסע מעל גיל 18). לא ניתן לאחד פטורים. אם אתה נושא ${cartons > 0 ? cartons + ' פאקטים' : 'כמות חריגה'} עבור כל הקבוצה, עליך לעבור במסלול האדום ולהצהיר.`);
+            warnings.push(`🚬 <strong>סיגריות וטבק:</strong> הפטור הוא <strong>אישי בלבד</strong> (פאקט 1 או 250 גרם טבק לנוסע מעל גיל 18). לא ניתן לאחד פטורים. אם אתה נושא ${cartons > 0 ? cartons + ' פאקטים' : 'כמות חריגה'} עבור כל הקבוצה, עליך לעבור במסלול האדום ולדווח.`);
             if (cartons > 1) needsRedPath = true;
         } else {
             if (cartons > 1) {
@@ -229,7 +229,7 @@ function processBotResponse(text) {
             alc += `• <strong>יין/בירה:</strong> עד 2 ליטר לנוסע בודד (מעל גיל 18).<br>`;
             alc += `• <strong>משקה חריף (וויסקי וכד'):</strong> עד 1 ליטר לנוסע בודד.`;
             if (numPeople > 1) {
-                alc += `<br>⚠️ <strong>לתשומת לבכם (${numPeople} אנשים):</strong> הפטור הוא אישי. <strong>חל איסור על איחוד פטורים.</strong> כל אחד חייב לשאת את הכמות שלו בנפרד בכבודתו.`;
+                alc += `<br>⚠️ <strong>לתשומת לבכם (${numPeople} אנשים):</strong> הפטור הוא אישי. <strong>חל איסור על איחוד פטורים.</strong> כל מוצר שחורג מהסכום האישי מצריך הגעה למכס במסלול האדום.`;
             }
             adviceChunks.push(alc);
 
@@ -322,10 +322,10 @@ function processBotResponse(text) {
     if (isCustomQuery && warnings.length > 0) {
         let groupWarning = '';
         if (numPeople > 1) {
-            groupWarning = `👨‍👩‍👧‍👦 <strong>לתשומת לבכם (קבוצה של ${numPeople}):</strong> הפטור ממכס הוא <strong>אישי בלבד ($200 לנוסע)</strong>. <br>⚠️ <strong>חשוב מאוד:</strong> לא ניתן לאחד או "לחבר" פטורים של מספר אנשים כדי לקבל פטור על מוצר אחד שערכו מעל $200. כל מוצר שחורג מהסכום האישי מחייב הצהרה.<br><br>`;
+            groupWarning = `👨‍👩‍👧‍👦 <strong>לתשומת לבכם (קבוצה של ${numPeople}):</strong> הפטור ממכס הוא <strong>אישי בלבד ($200 לנוסע)</strong>. <br>⚠️ <strong>חשוב מאוד:</strong> לא ניתן לאחד או "לחבר" פטורים של מספר אנשים כדי לקבל פטור על מוצר אחד שערכו מעל $200. כל מוצר שחורג מהסכום האישי מחייב הגעה למסלול האדום.<br><br>`;
         }
 
-        response = `<strong>🧮 ניתוח הצהרה:</strong><br><br>` + groupWarning + warnings.join('<br><br>');
+        response = `<strong>🧮 ניתוח המצב:</strong><br><br>` + groupWarning + warnings.join('<br><br>');
 
         if (needsRedPath) {
             response += `<br><br>🚨 <strong>החלטה:</strong> החריגה שצוינה מחייבת מעבר ב<strong>מסלול האדום 🔴</strong>. אי דיווח על מוצר שערכו מעל $200 (גם אם הבאתם אותו יחד) עלול לגרור קנסות כבדים והחרמה.`;
