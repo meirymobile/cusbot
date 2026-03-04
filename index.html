@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>מדריך מכס לנוסע השב מחו״ל</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+
+            <!-- Animation scene - airplane landing on runway -->
+            <div class="runway-scene">
+                <!-- Background clouds -->
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+
+                <!-- 3D perspective landing runway -->
+                <div class="runway">
+                    <div class="runway-lines"></div>
+                    <div class="runway-lights"></div>
+                </div>
+
+                <!-- Airplane approaching and landing (in simple clean SVG) -->
+                <div class="airplane-container">
+                    <svg width="60" height="40" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"
+                        style="transform: scaleX(-1);">
+                        <!-- Airplane flying naturally from left to right -->
+                        <!-- Bottom back wing (initially hidden by body) -->
+                        <path d="M70,35 L90,45 L80,35 Z" fill="#94a3b8" />
+
+                        <!-- Airplane body -->
+                        <path
+                            d="M10,25 C10,15 30,15 40,15 L70,18 C80,18 95,22 95,28 C95,35 75,35 40,35 L15,35 C5,35 10,25 10,25 Z"
+                            fill="#ffffff" />
+
+                        <!-- Blue stripe on body (for design) -->
+                        <path d="M20,25 L85,25 L85,28 L20,28 Z" fill="#3b82f6" />
+
+                        <!-- Windows -->
+                        <circle cx="30" cy="20" r="1.5" fill="#bae6fd" />
+                        <circle cx="35" cy="20" r="1.5" fill="#bae6fd" />
+                        <circle cx="40" cy="20" r="1.5" fill="#bae6fd" />
+                        <circle cx="45" cy="20" r="1.5" fill="#bae6fd" />
+                        <circle cx="50" cy="20" r="1.5" fill="#bae6fd" />
+                        <circle cx="55" cy="20" r="1.5" fill="#bae6fd" />
+
+                        <!-- Cockpit window -->
+                        <path d="M12,23 C12,18 20,18 20,18 L20,23 Z" fill="#0ea5e9" />
+
+                        <!-- Airplane tail -->
+                        <path d="M75,18 L90,5 L95,5 L90,20 Z" fill="#2563eb" />
+
+                        <!-- Prominent front wing -->
+                        <path d="M45,28 L75,55 L65,55 L35,28 Z" fill="#cbd5e1" />
+                        <path d="M45,28 L72,52 L65,52 L35,28 Z" fill="#e2e8f0" />
+
+                        <!-- Engine on wing -->
+                        <rect x="52" y="38" width="12" height="6" rx="3" fill="#64748b" />
+                        <ellipse cx="52" cy="41" rx="2" ry="3" fill="#1e293b" />
+
+                        <!-- Front wheel (appears on landing) -->
+                        <rect x="25" y="35" width="2" height="5" fill="#334155" />
+                        <circle cx="26" cy="41" r="2.5" fill="#0f172a" />
+
+                        <!-- Back wheel (appears on landing) -->
+                        <rect x="65" y="35" width="2" height="5" fill="#334155" />
+                        <circle cx="66" cy="41" r="2.5" fill="#0f172a" />
+                        <circle cx="69" cy="41" r="2.5" fill="#0f172a" />
+                    </svg>
+                </div>
+            </div>
+
+            <h1>ברוכים השבים!</h1>
+            <div class="subtitle">המדריך המהיר למכס</div>
+        </header>
+
+        <!-- Main exemption -->
+        <div class="card primary-rule delay-1">
+            <div class="tag-price">200$</div>
+            <div class="primary-text">
+                <h2>פטור אישי ממס</h2>
+                <p>על חפצים לשימוש עצמי או מתנות (שאינם מפורטים מטה).</p>
+                <div class="personal-note">💡 הפטור הוא אישי ולא ניתן להעברה!</div>
+            </div>
+        </div>
+
+        <!-- Quantity limits in grid style -->
+        <div class="card delay-2">
+            <div class="section-title">✨ כמויות פטורות ממס (מעל גיל 18)</div>
+            <div class="grid-quotas">
+                <div class="quota-box" onclick="openModal('alcohol')">
+                    <div class="icon-circle bg-wine">🍷</div>
+                    <h3>אלכוהול</h3>
+                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                </div>
+                <div class="quota-box" onclick="openModal('tobacco')">
+                    <div class="icon-circle bg-smoke">🚬</div>
+                    <h3>טבק וסיגריות</h3>
+                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                </div>
+                <div class="quota-box" onclick="openModal('vape')">
+                    <div class="icon-circle bg-vape">
+                        <img src="vape-icon.png" alt="vape" style="width: 34px; height: 34px; object-fit: contain;">
+                    </div>
+                    <h3>סיגריה אלקטרונית</h3>
+                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                </div>
+                <div class="quota-box" onclick="openModal('perfume')">
+                    <div class="icon-circle bg-perfume">✨</div>
+                    <h3>בשמים ותמרוקים</h3>
+                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                </div>
+                <div class="quota-box" onclick="openModal('food')">
+                    <div class="icon-circle bg-food">🍏</div>
+                    <h3>מזון וחקלאות</h3>
+                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                </div>
+                <div class="quota-box" onclick="openModal('clothes')">
+                    <div class="icon-circle bg-cloth">👕</div>
+                    <h3>הלבשה והנעלה</h3>
+                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning - Red path -->
+        <div class="red-path-warning delay-3">
+            <h4>🔴 חריגה? עוברים רק באדום!</h4>
+            <p><strong>כל חריגה</strong> מהכמות המותרת (אפילו בקבוק טיפה יותר גדול או פאקט נוסף) מצריכה הצהרה ומעבר
+                ב<strong>מסלול האדום</strong> במכס.<br>מעבר במסלול הירוק עם חריגות עלול לגרור החרמה של הטובין וקנס כספי
+                גבוה!</p>
+        </div>
+
+        <!-- Cash warning -->
+        <div class="card warning-box delay-4">
+            <div class="warning-icon">🚨</div>
+            <div class="warning-text">
+                <h3>נכנסים עם כסף מזומן?</h3>
+                <p>חובה לדווח לפקיד המכס על סכום העולה על <span class="highlight-red">50,000 ₪</span>.</p>
+                <p style="font-size: 11px; margin-top: 4px; color: #9B2C2C;">(במעבר יבשתי: חובת דיווח מעל 12,000 ₪)</p>
+            </div>
+        </div>
+
+        <div class="disclaimer delay-4" style="animation-delay: 0.5s;">
+            המידע מוגש לנוחותכם ואינו מחליף את לשון החוק המלא
+        </div>
+
+        <!-- Action button -->
+        <a href="https://www.gov.il/BlobFolder/guide/customs-guide-for-returning-traveler/he/Guides_customs_Guides_customsreturningpassanger_new.pdf"
+            class="action-btn delay-4" style="animation-delay: 0.6s;" target="_blank">
+            📖 למדריך המכס המלא (PDF)
+        </a>
+    </div>
+
+    <!-- Customs Chatbot -->
+    <div class="bot-btn" onclick="toggleChat()" id="botBtn"
+        style="background: white; border: 2px solid var(--accent-blue); padding: 0;">
+        <img src="Bot.png" alt="מכס בוט" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+        <div class="bot-btn-badge" id="botBadge">1</div>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <img src="Bot.png" alt="מכס בוט"
+                    style="width: 24px; height: 24px; object-fit: cover; border-radius: 50%; background: white;">
+                נציג מכס וירטואלי
+            </div>
+            <button onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div id="chatDisclaimer"
+                style="text-align: center; padding: 10px; border: 1px dashed #FC8181; border-radius: 12px; background: #FFF5F5;">
+                <div style="font-size: 28px; margin-bottom: 5px;">⚖️</div>
+                <div style="font-size: 13.5px; color: #C53030; font-weight: 800; margin-bottom: 8px;">הבהרה משפטית טרם
+                    השימוש</div>
+                <div style="font-size: 12.5px; color: #4A5568; line-height: 1.4; margin-bottom: 12px;">
+                    המידע המופק על ידי בוט זה הוא <strong>לצורך הכוונה ונוחות בלבד</strong> ואינו מחייב בשום צורה. המידע
+                    אינו מחליף ייעוץ מקצועי או את לשון החוק.
+                    <strong>האחריות המלאה</strong> בגין השימוש במידע וההחלטות המתקבלות על פיו (כגון מעבר במסלולים במכס)
+                    חלה על המשתמש בלבד, ולא ניתן יהיה לבוא בטענות או בתביעות בגין כך.
+                </div>
+                <button
+                    style="background:var(--accent-blue); color:white; border:none; padding:10px 18px; font-size:13px; font-weight:bold; border-radius:12px; cursor:pointer;"
+                    onclick="acceptDisclaimer()">קראתי ואני מאשר/ת</button>
+            </div>
+
+            <div id="chatInitialGreeting" style="display: none;">
+                <div class="msg bot">שלום! 👋 אני עוזר המכס הווירטואלי שלכם. אני מעודכן בכל נהלי 2024 ומכיר את כל
+                    הפטורים (כולל דייסון, אייפונים, ובגדים). איך אני יכול לעזור לכם או למשפחה שלכם היום? 😊</div>
+                <div class="quick-replies">
+                    <button class="quick-btn" onclick="handleQuickReply('אנחנו 3 אנשים, מה הפטור שלנו?')">�‍👩‍👧‍👦
+                        פטור למשפחה</button>
+                    <button class="quick-btn" onclick="handleQuickReply('כמה מס יש על דייסון שעולה 400 דולר?')">� מס על
+                        דייסון</button>
+                    <button class="quick-btn" onclick="handleQuickReply('הבאתי 15 חולצות חדשות, האם זה בסדר?')">👕 כמות
+                        בגדים</button>
+                    <button class="quick-btn" onclick="handleQuickReply('מס על סמארטפון ב-800 דולר')">📱
+                        סמארטפון</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input" id="chatInputArea" style="opacity: 0.5; pointer-events: none;">
+            <input type="text" id="chatInput" placeholder="הקלד שאלה (למשל: מחשב נייד)..."
+                onkeypress="handleEnter(event)">
+            <button onclick="sendUserMsg()">➤</button>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="infoModal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModalBtn()">✕</button>
+            <div class="modal-icon" id="modalIcon"></div>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer-note">⚠️ הבאתם יותר מהמותר? חובה מסלול אדום! 🔴</div>
+        </div>
+    </div>
+
+    <script src="bot.js"></script>
+</body>
+
+</html>

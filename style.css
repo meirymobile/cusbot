@@ -1,0 +1,943 @@
+        :root {
+            --bg-gradient: linear-gradient(135deg, #FFB8D2 0%, #FFDCA8 50%, #B5DEFF 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #2D3748;
+            --text-light: #718096;
+
+            --accent-green: #48BB78;
+            --accent-blue: #4299E1;
+            --accent-purple: #9F7AEA;
+            --accent-pink: #ED64A6;
+            --accent-orange: #ED8936;
+            --accent-red: #F56565;
+
+            --modal-overlay: rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        header {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* ===== מתחם האנימציה - מטוס נוחת ===== */
+        .runway-scene {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(to bottom, #7dd3fc 0%, #38bdf8 60%, #bae6fd 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border: 2px solid #7dd3fc;
+            box-shadow: inset 0 -10px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        /* עננים ברקע (סטטיים) */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .cloud-1 {
+            width: 50px;
+            height: 15px;
+            top: 20px;
+            right: 20px;
+            animation: floatCloud 20s linear infinite;
+        }
+
+        .cloud-1::before {
+            width: 25px;
+            height: 25px;
+            top: -12px;
+            left: 8px;
+        }
+
+        .cloud-1::after {
+            width: 20px;
+            height: 20px;
+            top: -8px;
+            left: 25px;
+        }
+
+        .cloud-2 {
+            width: 40px;
+            height: 12px;
+            top: 40px;
+            left: 30px;
+            animation: floatCloud 15s linear infinite reverse;
+            opacity: 0.6;
+        }
+
+        .cloud-2::before {
+            width: 20px;
+            height: 20px;
+            top: -10px;
+            left: 10px;
+        }
+
+        @keyframes floatCloud {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50px);
+            }
+        }
+
+        /* מסלול נחיתה */
+        .runway {
+            position: absolute;
+            bottom: 0;
+            left: -10%;
+            width: 120%;
+            height: 40px;
+            background: #334155;
+            transform: perspective(100px) rotateX(20deg);
+            transform-origin: bottom;
+            z-index: 2;
+        }
+
+        /* פסי המסלול */
+        .runway-lines {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 15px,
+                    #f8fafc 15px,
+                    #f8fafc 35px);
+            transform: translateY(-50%);
+            animation: decelerateRunway 6s ease-out forwards;
+            z-index: 3;
+        }
+
+        /* אורות מסלול */
+        .runway-lights {
+            position: absolute;
+            top: 10%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+        }
+
+        .runway-lights::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 30px, #fef08a 30px, #fef08a 33px);
+            animation: decelerateRunway 6s ease-out forwards;
+        }
+
+        .runway-lights::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 30px, #fef08a 30px, #fef08a 33px);
+            animation: decelerateRunway 6s ease-out forwards;
+        }
+
+        @keyframes decelerateRunway {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 400px 0;
+            }
+        }
+
+        /* מטוס (SVG) */
+        .airplane-container {
+            position: absolute;
+            z-index: 4;
+            /* מתחיל משמאל, נוחת, ועוצר בפארקינג בצד ימין */
+            animation: landingSequence 6s ease-out forwards;
+        }
+
+        @keyframes landingSequence {
+            0% {
+                left: -100px;
+                bottom: 150px;
+                transform: scale(0.5) rotate(15deg);
+            }
+
+            20% {
+                left: 15%;
+                bottom: 70px;
+                transform: scale(0.8) rotate(10deg);
+            }
+
+            35% {
+                left: 35%;
+                bottom: 12px;
+                /* מגע עם הקרקע */
+                transform: scale(1) rotate(-3deg);
+            }
+
+            40% {
+                left: 42%;
+                bottom: 12px;
+                transform: scale(1) rotate(0deg);
+            }
+
+            100% {
+                left: 70%;
+                /* עוצר בצד ימין */
+                bottom: 12px;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* ================================ */
+
+        h1 {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--accent-purple);
+            margin-bottom: 2px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            animation: slideUp 0.6s ease-out backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        /* The $200 Card */
+        .primary-rule {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #C6F6D5 0%, #9AE6B4 100%);
+            padding: 16px;
+        }
+
+        .tag-price {
+            background: #fff;
+            color: var(--accent-green);
+            font-weight: 900;
+            font-size: 26px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.2);
+            margin-left: 14px;
+            transform: rotate(-3deg);
+        }
+
+        .primary-text h2 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #22543D;
+            margin-bottom: 2px;
+        }
+
+        .primary-text p {
+            font-size: 13px;
+            color: #276749;
+            line-height: 1.3;
+        }
+
+        .personal-note {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 6px;
+            color: #22543D;
+        }
+
+        /* Quotas Grid */
+        .section-title {
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--accent-blue);
+        }
+
+        .grid-quotas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quota-box {
+            background: #F7FAFC;
+            border: 2px solid #EDF2F7;
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .quota-box::after {
+            content: "👆 לחץ לפירוט";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        @media (hover: hover) {
+            .quota-box:hover::after {
+                opacity: 1;
+            }
+        }
+
+        .quota-box-mobile-hint {
+            display: block;
+            font-size: 11px;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-top: 6px;
+            background: rgba(66, 153, 225, 0.1);
+            border-radius: 10px;
+            padding: 2px 4px;
+        }
+
+        .quota-box:active {
+            transform: scale(0.95);
+            border-color: var(--accent-blue);
+            background: #EBF8FF;
+        }
+
+        .icon-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            margin: 0 auto 8px auto;
+        }
+
+        .bg-wine {
+            background: #FED7D7;
+        }
+
+        .bg-smoke {
+            background: #E2E8F0;
+        }
+
+        .bg-vape {
+            background: #E9D8FD;
+        }
+
+        .bg-perfume {
+            background: #FBB6CE;
+        }
+
+        .bg-food {
+            background: #C6F6D5;
+        }
+
+        .bg-cloth {
+            background: #FEEBC8;
+        }
+
+        .cash-subtext {
+            font-size: 11px;
+            margin-top: 6px;
+            color: #9B2C2C;
+            font-weight: 600;
+            line-height: 1.4;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .quota-box h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .quota-box p {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.2;
+        }
+
+        /* Red Path Warning - New */
+        .red-path-warning {
+            background: #FFF5F5;
+            border: 2px solid #FC8181;
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            animation: slideUp 0.6s ease-out backwards;
+            box-shadow: 0 4px 10px rgba(252, 129, 129, 0.15);
+        }
+
+        .red-path-warning h4 {
+            color: #C53030;
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .red-path-warning p {
+            font-size: 13.5px;
+            color: #742A2A;
+            line-height: 1.4;
+        }
+
+        .red-path-warning strong {
+            background: rgba(252, 129, 129, 0.3);
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        /* Cash Warning */
+        .warning-box {
+            background: #FFF5F5;
+            border: 2px dashed #FEB2B2;
+            display: flex;
+            align-items: center;
+            padding: 14px;
+        }
+
+        .warning-icon {
+            font-size: 32px;
+            margin-left: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-text h3 {
+            color: #C53030;
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .warning-text p {
+            font-size: 13px;
+            color: #742A2A;
+            line-height: 1.3;
+        }
+
+        .highlight-red {
+            background: #FED7D7;
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            color: #C53030;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--modal-overlay);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #F1F5F9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #64748B;
+            transition: background 0.2s;
+        }
+
+        .modal-close:active {
+            background: #E2E8F0;
+        }
+
+        .modal-icon {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .modal-body {
+            font-size: 14.5px;
+            color: var(--text-main);
+            line-height: 1.5;
+            background: #F8FAFC;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .modal-body ul {
+            padding-right: 20px;
+            margin-top: 8px;
+            margin-bottom: 10px;
+        }
+
+        .modal-body li {
+            margin-bottom: 6px;
+            color: #2D3748;
+        }
+
+        .example-box {
+            background: #EBF8FF;
+            border-right: 3px solid var(--accent-blue);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            color: #2B6CB0;
+            margin-top: 10px;
+        }
+
+        .example-box strong {
+            color: #1A365D;
+        }
+
+        .modal-footer-note {
+            font-size: 13px;
+            color: #C53030;
+            text-align: center;
+            font-weight: 700;
+            background: #FFF5F5;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px dashed #FC8181;
+        }
+
+        /* Footer & Button */
+        .disclaimer {
+            text-align: center;
+            font-size: 11px;
+            color: rgba(45, 55, 72, 0.7);
+            margin: 4px 0;
+            font-weight: 500;
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(to right, var(--accent-pink), var(--accent-orange));
+            color: white;
+            text-align: center;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(237, 100, 166, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .action-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(237, 100, 166, 0.3);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                gap: 10px;
+            }
+
+            .card {
+                padding: 14px;
+            }
+
+            .tag-price {
+                font-size: 22px;
+                padding: 8px 12px;
+            }
+
+            .icon-circle {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .quota-box {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+
+        /* Bot Chat Styles */
+        .bot-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 55px;
+            height: 55px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.4);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .bot-btn:hover {
+            transform: scale(1.05);
+            background: #2b6cb0;
+        }
+
+        .bot-btn-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #e53e3e;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 85px;
+            left: 20px;
+            width: 320px;
+            max-height: 450px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0);
+            transform-origin: bottom left;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 400px) {
+            .chat-window {
+                width: calc(100% - 40px);
+                bottom: 80px;
+            }
+        }
+
+        .chat-window.active {
+            transform: scale(1);
+        }
+
+        .chat-header {
+            background: var(--accent-blue);
+            color: white;
+            padding: 15px;
+            font-weight: 800;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            background: #F8FAFC;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 13.5px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .msg.bot {
+            background: white;
+            border: 1px solid #E2E8F0;
+            color: #2d3748;
+            align-self: flex-start;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .msg.user {
+            background: var(--accent-blue);
+            color: white;
+            align-self: flex-end;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 4px rgba(66, 153, 225, 0.2);
+        }
+
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #E2E8F0;
+            padding: 10px;
+            background: white;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            border: 1px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .chat-input button {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            margin-right: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .chat-input button:active {
+            transform: scale(0.9);
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .quick-btn {
+            background: #EBF8FF;
+            color: #2B6CB0;
+            border: 1px solid #BEE3F8;
+            padding: 6px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .quick-btn:active {
+            transform: scale(0.95);
+        }
