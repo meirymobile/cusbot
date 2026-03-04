@@ -171,12 +171,12 @@ function processBotResponse(text) {
     let needsRedPath = false;
 
     // --- IDENTIFY CONTEXT: People ---
-    // Matches "אנחנו 3", "ל-4 אנשים", "3 נוסעים" etc.
     const peopleMatch = query.match(/(\d+)\s*(אנשים|נוסעים|חברים|בני משפחה)|אנחנו\s*(\d+)/);
     let numPeople = 1;
     if (peopleMatch) {
         numPeople = parseInt(peopleMatch[1] || peopleMatch[3]);
-        if (isNaN(numPeople) || numPeople < 1) numPeople = 1;
+    } else if (query.includes('אנחנו') || query.includes('קנינו') || query.includes('הבאנו')) {
+        numPeople = 2; // Assume at least a couple if they use plural "We"
     }
 
     // --- CALCULATION: Cigarettes / Tobacco ---
@@ -209,40 +209,44 @@ function processBotResponse(text) {
     }
 
     // --- CALCULATION: Alcohol / Perfume / Bottles ---
-    const quantityMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר|שמיניה|שישיה|בקבוק|יחידות|מ"ל)/);
-    const hasAlcoholKeyword = query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה') || query.includes('ערק') || query.includes('בירה');
-    const hasPerfumeKeyword = query.includes('בושם') || query.includes('בשמים');
-    const hasBottleKeyword = query.includes('בקבוק') || query.includes('ליטר');
+    const bottleKeywords = /בקבוק|ליטר|יין|אלכוהול|ודקה|וויסקי|ערק|בירה|בושם|בשמים|מ"ל/;
+    const quantityMatch = query.match(/(\d+)/); // Find any number near bottle context
 
-    if (hasAlcoholKeyword || hasPerfumeKeyword || hasBottleKeyword) {
+    if (bottleKeywords.test(query)) {
         isCustomQuery = true;
         const amount = quantityMatch ? parseInt(quantityMatch[1]) : 0;
         let adviceChunks = [];
 
-        // Case A: Alcohol (Spirits vs Wine)
-        if (hasAlcoholKeyword || hasBottleKeyword) {
-            let alcoholAdvice = `🍷 <strong>במידה ומדובר באלכוהול:</strong><br>`;
-            alcoholAdvice += `• <strong>יין/בירה:</strong> עד 2 ליטר לנוסע בודד (מעל גיל 18).<br>`;
-            alcoholAdvice += `• <strong>משקה חריף (וויסקי וכד'):</strong> עד 1 ליטר לנוסע בודד.`;
+        // Breakdown categories
+        const isWineQuery = /יין|בירה/.test(query);
+        const isSpiritsQuery = /אלכוהול|ודקה|וויסקי|ערק|חריף/.test(query);
+        const isPerfumeQuery = /בושם|בשמים|מ"ל/.test(query);
+        const isGenericBottle = !isWineQuery && !isSpiritsQuery && !isPerfumeQuery;
+
+        // Alcohol Breakdown
+        if (isWineQuery || isSpiritsQuery || isGenericBottle) {
+            let alc = `🍷 <strong>במידה ומדובר באלכוהול:</strong><br>`;
+            alc += `• <strong>יין/בירה:</strong> עד 2 ליטר לנוסע בודד (מעל גיל 18).<br>`;
+            alc += `• <strong>משקה חריף (וויסקי וכד'):</strong> עד 1 ליטר לנוסע בודד.`;
             if (numPeople > 1) {
-                alcoholAdvice += `<br>⚠️ <strong>לתשומת לבכם:</strong> לכל אחד מ-${numPeople} האנשים יש מכסה אישית. <strong>חל איסור על איחוד פטורים.</strong> כל אחד חייב לשאת את הכמות שלו בנפרד.`;
+                alc += `<br>⚠️ <strong>לתשומת לבכם (${numPeople} אנשים):</strong> הפטור הוא אישי. <strong>חל איסור על איחוד פטורים.</strong> כל אחד חייב לשאת את הכמות שלו בנפרד בכבודתו.`;
             }
-            // Logic for Red Path
-            const isWineOnly = (query.includes('יין') || query.includes('בירה')) && !query.includes('חריף') && !query.includes('וויסקי') && !query.includes('ודקה');
-            const limit = isWineOnly ? 2 : 1;
+            adviceChunks.push(alc);
+
+            // Red path logic for alcohol
+            const limit = isWineQuery && !isSpiritsQuery ? 2 : 1;
             if (amount > limit) needsRedPath = true;
-            adviceChunks.push(alcoholAdvice);
         }
 
-        // Case B: Perfume
-        if (hasPerfumeKeyword || (hasBottleKeyword && !hasAlcoholKeyword)) {
-            let perfumeAdvice = `✨ <strong>במידה ומדובר בבשמים:</strong><br>`;
-            perfumeAdvice += `• הפטור הוא עד <strong>250 מ"ל</strong> (רבע ליטר) לנוסע בודד.<br>`;
+        // Perfume Breakdown
+        if (isPerfumeQuery || isGenericBottle) {
+            let perf = `✨ <strong>במידה ומדובר בבשמים:</strong><br>`;
+            perf += `• הפטור הוא עד <strong>250 מ"ל</strong> (רבע ליטר) לנוסע בודד בתוך המזוודה.`;
             if (numPeople > 1) {
-                perfumeAdvice += `⚠️ <strong>לתשומת לבכם:</strong> עבור ${numPeople} אנשים, לא ניתן לאחד את הפטורים עבור בקבוק אחד גדול או כמות מרוכזת.`;
+                perf += `<br>⚠️ לא ניתן לצרף פטורים עבור בקבוק אחד גדול.`;
             }
-            if (amount > 0 && amount > 1) needsRedPath = true; // Most perfume bottles are around 100ml, if amount > 1 bottle it might exceed 250ml or require splitting
-            adviceChunks.push(perfumeAdvice);
+            adviceChunks.push(perf);
+            if (isPerfumeQuery && amount > 250) needsRedPath = true;
         }
 
         if (amount > 0) {
