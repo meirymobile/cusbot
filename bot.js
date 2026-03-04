@@ -306,15 +306,22 @@ function processBotResponse(text) {
 
     // --- CALCULATION: Clothing Quantities ---
     const clothesMatch = query.match(/(\d+)\s*(חולצות|מכנסיים|נעליים|בגדים|פריטים)/);
-    if (clothesMatch) {
+    const hasClothesKeyword = /חולצ|מכנס|נעל|בגד|פריט/.test(query);
+
+    if (clothesMatch || (query.includes('כמה') && hasClothesKeyword)) {
         isCustomQuery = true;
-        const count = parseInt(clothesMatch[1]);
-        const type = clothesMatch[2];
-        if (count > 10) {
-            warnings.push(`👕 <strong>כמות ${type}:</strong> הבאת ${count} יחידות. המכס בודק האם הכמות סבירה לשימוש אישי. מעל 12-15 יחידות זהות עלול לעורר חשד לייבוא מסחרי. אם אלו פריטים זהים באריזה, חובה להצהיר.`);
-            if (count > 20) needsRedPath = true;
+        if (clothesMatch) {
+            const count = parseInt(clothesMatch[1]);
+            const type = clothesMatch[2];
+            if (count > 10) {
+                warnings.push(`👕 <strong>כמות ${type}:</strong> הבאת ${count} יחידות. המכס בודק האם הכמות סבירה לשימוש אישי. מעל 12-15 יחידות זהות עלול לעורר חשד לייבוא מסחרי. אם אלו פריטים זהים באריזה, חובה להצהיר.`);
+                if (count > 20) needsRedPath = true;
+            } else {
+                warnings.push(`👕 <strong>כמות ${type}:</strong> ${count} יחידות נחשבות לכמות סבירה לשימוש אישי שנמצאת בפטור.`);
+            }
         } else {
-            warnings.push(`👕 <strong>כמות ${type}:</strong> ${count} יחידות נחשבות לכמות סבירה לשימוש אישי שנמצאת בפטור.`);
+            // General "How many" question
+            warnings.push(`👕 <strong>כמות בגדים ונעליים:</strong> אין מספר מוחלט בחוק, אך הכלל הוא <strong>"כמות סבירה לשימוש אישי"</strong>. <br>💡 <strong>טיפ:</strong> הבאת מעל 10-12 פריטים זהים (למשל 12 חולצות מאותו סוג) עלולה להיחשב כייבוא מסחרי ולחייב תשלום מס ומעבר במסלול האדום להצהרה.`);
         }
     }
 
