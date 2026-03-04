@@ -209,23 +209,45 @@ function processBotResponse(text) {
     }
 
     // --- CALCULATION: Alcohol / Wine ---
-    const wineMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר)/);
-    if (wineMatch && (query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה'))) {
+    const alcoholMatch = query.match(/(\d+)\s*(בקבוקי יין|בקבוקים|ליטר יין|ליטר)/);
+    if (query.includes('יין') || query.includes('אלכוהול') || query.includes('וויסקי') || query.includes('ודקה') || query.includes('ערק') || query.includes('בירה')) {
         isCustomQuery = true;
-        const amount = parseInt(wineMatch[1]);
-        const isWineOnly = query.includes('יין') && !query.includes('חריף');
-        const limitPerPerson = isWineOnly ? 2 : 1; // 2L wine or 1L spirits
+        const amount = alcoholMatch ? parseInt(alcoholMatch[1]) : 0;
+        const isWineOnly = (query.includes('יין') || query.includes('בירה')) && !query.includes('חריף') && !query.includes('וויסקי') && !query.includes('ודקה');
+        const limitPerPerson = isWineOnly ? 2 : 1;
 
-        if (numPeople > 1) {
-            warnings.push(`🍷 <strong>אלכוהול:</strong> מותר 2 ליטר יין <strong>או</strong> 1 ליטר משקה חריף לכל נוסע (מעל גיל 18). במידה ואתה נושא את כל ה-${amount} יחידות עבור כולם, עדיף להצהיר באדום כדי למנוע אי-הבנה.`);
-            if (amount > limitPerPerson) needsRedPath = true;
+        if (amount > 0) {
+            if (numPeople > 1) {
+                warnings.push(`🍷 <strong>אלכוהול:</strong> לכל אחד מ-${numPeople} הנוסעים (מעל גיל 18) יש פטור אישי של ${limitPerPerson} ליטר. <br>⚠️ <strong>אסור לאחד פטורים:</strong> לא ניתן לצרף את הזכויות שלכם כדי להביא בקבוק אחד גדול או כמות מרוכזת. כל נוסע חייב לשאת את הכמות שלו בנפרד בכבודתו.`);
+                if (amount > limitPerPerson) needsRedPath = true;
+            } else {
+                if (amount > limitPerPerson) {
+                    warnings.push(`🍷 <strong>אלכוהול:</strong> חרגת מהמכסה המותרת (${limitPerPerson} ליטר). <br><span style="color:#C53030; font-weight:bold;">↳ חובה לעבור במסלול האדום ולשלם מס על החריגה.</span>`);
+                    needsRedPath = true;
+                } else {
+                    warnings.push(`🍷 <strong>אלכוהול:</strong> הכמות שציינת נמצאת בתוך הפטור האישי.`);
+                }
+            }
         } else {
-            if (amount > limitPerPerson) {
-                warnings.push(`🍷 <strong>אלכוהול:</strong> חרגת מהמכסה המותרת (${limitPerPerson} ליטר). <br><span style="color:#C53030; font-weight:bold;">↳ חובה לעבור במסלול האדום ולשלם מס על החריגה.</span>`);
+            // General "How much" question
+            warnings.push(`🍷 <strong>מכסת אלכוהול:</strong> הפטור הוא <strong>אישי בלבד</strong>: עד 2 ליטר יין/בירה <b>או</b> 1 ליטר משקה חריף לכל נוסע בנפרד (מעל גיל 18). <br>💡 עבור ${numPeople} אנשים, לכל אחד יש את המכסה האישית שלו. <strong>אין אפשרות לאחד את המכסות יחד עבור מוצר אחד או כמות מרוכזת.</strong>`);
+        }
+    }
+
+    // --- CALCULATION: Perfume ---
+    const perfumeMatch = query.match(/(\d+)\s*(מ"ל|בקבוקים|בקבוק)/);
+    if (query.includes('בושם') || query.includes('בשמים')) {
+        isCustomQuery = true;
+        const amountMl = perfumeMatch ? parseInt(perfumeMatch[1]) : 0;
+        if (amountMl > 0) {
+            if (amountMl > 250) {
+                warnings.push(`✨ <strong>בשמים:</strong> הכמות שציינת (${amountMl} מ"ל) חורגת מהפטור האישי של 250 מ"ל לנוסע. <br>⚠️ <strong>שימו לב:</strong> לא ניתן לאחד פטורים של כמה אנשים עבור בקבוק אחד גדול או כמות כוללת.`);
                 needsRedPath = true;
             } else {
-                warnings.push(`🍷 <strong>אלכוהול:</strong> הכמות שציינת נמצאת בטווח הפטור לנוסע בודד.`);
+                warnings.push(`✨ <strong>בשמים:</strong> ${amountMl} מ"ל נמצא בתוך הפטור האישי.`);
             }
+        } else {
+            warnings.push(`✨ <strong>מכסת בשמים:</strong> הפטור הוא <strong>אישי בלבד</strong>: עד 250 מ"ל (רבע ליטר) של בושם או מי קולון לכל נוסע. <br>💡 עבור ${numPeople} אנשים, לכל אחד יש זכאות אישית נפרדת. <strong>אסור לאחד פטורים או לצרף זכויות של כמה אנשים יחד.</strong>`);
         }
     }
 
