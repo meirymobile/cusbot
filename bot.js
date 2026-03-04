@@ -170,26 +170,32 @@ function processBotResponse(text) {
     let warnings = [];
     let needsRedPath = false;
 
+    // --- Core Keywords for broad detection ---
+    const productKeywords = /חולצ|מכנס|נעל|בגד|פריט|בקבוק|ליטר|יין|אלכוהול|ודקה|וויסקי|ערק|בירה|בושם|בשמים|מ"ל|פאקט|סיגרי|טבק|vape|שואב|דייסון|dyson|מחשב|לפטופ|טלפון|סמארטפון|אייפון|iphone|טאבלט|אייפד|ipad|קונסול|פלייסטיישן|xbox|טלוויזיה|שעון|תיק|אוזניות|מצלמה/;
+
+    if (productKeywords.test(query) || query.includes('כמה') || query.includes('מחיר') || query.includes('עולה') || query.includes('מותר')) {
+        isCustomQuery = true;
+    }
+
     // --- IDENTIFY CONTEXT: People ---
     const peopleMatch = query.match(/(\d+)\s*(אנשים|נוסעים|חברים|בני משפחה)|אנחנו\s*(\d+)/);
     let numPeople = 1;
     if (peopleMatch) {
         numPeople = parseInt(peopleMatch[1] || peopleMatch[3]);
+        if (isNaN(numPeople)) numPeople = 1;
     } else if (query.includes('אנחנו') || query.includes('קנינו') || query.includes('הבאנו')) {
         numPeople = 2; // Assume at least a couple if they use plural "We"
     }
 
     // --- CALCULATION: Cigarettes / Tobacco ---
-    const cigarettesMatch = query.match(/(\d+)\s*(פאקטים|פאקט|סיגריות|קופסאות)/);
-    const tobaccoMatch = query.match(/(\d+)\s*(גרם|ג'|ק"ג|קילו)\s*(טבק)/) || query.match(/(טבק)/);
-
-    if (cigarettesMatch || tobaccoMatch) {
-        isCustomQuery = true;
+    const cigarettesKeywords = /פאקט|סיגרי|טבק|קופסא/;
+    if (cigarettesKeywords.test(query)) {
+        const cigarettesMatch = query.match(/(\d+)/);
         let cartons = 0;
         if (query.includes('פאקט')) {
-            cartons = parseInt(cigarettesMatch ? cigarettesMatch[1] : 0);
-        } else if (query.includes('סיגריות')) {
-            const count = parseInt(cigarettesMatch ? cigarettesMatch[1] : 0);
+            cartons = cigarettesMatch ? parseInt(cigarettesMatch[1]) : 1;
+        } else if (query.includes('סיגרי')) {
+            const count = cigarettesMatch ? parseInt(cigarettesMatch[1]) : 200;
             cartons = count / 200;
         }
 
@@ -305,19 +311,16 @@ function processBotResponse(text) {
     }
 
     // --- CALCULATION: Clothing Quantities ---
-    const clothesMatch = query.match(/(\d+)\s*(חולצות|מכנסיים|נעליים|בגדים|פריטים)/);
-    const hasClothesKeyword = /חולצ|מכנס|נעל|בגד|פריט/.test(query);
-
-    if (clothesMatch || (query.includes('כמה') && hasClothesKeyword)) {
-        isCustomQuery = true;
+    const clothesKeywords = /חולצ|מכנס|נעל|בגד|פריט/;
+    if (clothesKeywords.test(query)) {
+        const clothesMatch = query.match(/(\d+)/);
         if (clothesMatch) {
             const count = parseInt(clothesMatch[1]);
-            const type = clothesMatch[2];
             if (count > 10) {
-                warnings.push(`👕 <strong>כמות ${type}:</strong> הבאת ${count} יחידות. המכס בודק האם הכמות סבירה לשימוש אישי. מעל 12-15 יחידות זהות עלול לעורר חשד לייבוא מסחרי. אם אלו פריטים זהים באריזה, חובה להצהיר.`);
+                warnings.push(`👕 <strong>כמות פריטים:</strong> הבאת ${count} יחידות. המכס בודק האם הכמות סבירה לשימוש אישי. מעל 12-15 יחידות זהות עלול לעורר חשד לייבוא מסחרי. אם אלו פריטים זהים באריזה, חובה להצהיר.`);
                 if (count > 20) needsRedPath = true;
             } else {
-                warnings.push(`👕 <strong>כמות ${type}:</strong> ${count} יחידות נחשבות לכמות סבירה לשימוש אישי שנמצאת בפטור.`);
+                warnings.push(`👕 <strong>כמות פריטים:</strong> ${count} יחידות נחשבות לכמות סבירה לשימוש אישי שנמצאת בפטור.`);
             }
         } else {
             // General "How many" question
