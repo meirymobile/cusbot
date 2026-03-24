@@ -195,6 +195,7 @@ function toggleProhibited() {
     isProhibitedMode = !isProhibitedMode;
     const boxes = document.querySelectorAll('.quota-box');
     const toggleBtn = document.getElementById('prohibitedToggle');
+    const sectionTitle = document.getElementById('sectionTitle');
 
     boxes.forEach(box => {
         if (isProhibitedMode) {
@@ -205,9 +206,11 @@ function toggleProhibited() {
     });
 
     if (isProhibitedMode) {
+        if (sectionTitle) sectionTitle.innerText = "🚫 פריטים אסורים בייבוא";
         toggleBtn.innerText = '🟢 חזרה לפטורים';
         toggleBtn.classList.add('active');
     } else {
+        if (sectionTitle) sectionTitle.innerText = "✨ כמויות פטורות ממס";
         toggleBtn.innerText = '🔴 פריטים אסורים';
         toggleBtn.classList.remove('active');
     }
