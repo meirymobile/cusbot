@@ -952,6 +952,89 @@
             }
         }
 
+        /* Bot Thought Cloud - Premium Style */
+        .bot-bubble {
+            position: absolute;
+            bottom: 95px; 
+            left: -10px;
+            right: auto !important;
+            background: white;
+            padding: 15px 22px;
+            border-radius: 50px;
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--accent-blue);
+            white-space: nowrap;
+            /* Unified border effect around all cloud circles */
+            filter: drop-shadow(0 0 1px var(--accent-blue)) 
+                    drop-shadow(0 4px 15px rgba(0, 0, 0, 0.1));
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.6) translateY(30px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+            /* To ensure merged look, all parts have white bg and no border */
+            border: none; 
+        }
+
+        /* Large Puff center */
+        .bot-bubble::before {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: 20px;
+            width: 35px;
+            height: 35px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* Small Puff side */
+        .bot-bubble::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            width: 25px;
+            height: 25px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* The Small "Thinking" Bubbles (the tail) */
+        .bot-bubble-tail {
+            position: absolute;
+            bottom: -15px;
+            left: 30px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            filter: drop-shadow(0 0 0.5px var(--accent-blue));
+            border: none;
+        }
+
+        .bot-bubble-tail::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: -8px;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            filter: drop-shadow(0 0 0.5px var(--accent-blue));
+        }
+
+        .bot-btn.show-bubble .bot-bubble {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .bot-btn {
+            overflow: visible !important; /* Allow bubble to stick out */
+        }
+
         /* Bot Chat Styles */
         .bot-btn {
             position: fixed;

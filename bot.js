@@ -233,10 +233,17 @@ function handleBoxClick(type) {
 const botBtn = document.getElementById('botBtn');
 setInterval(() => {
     if (botBtn) {
+        // Jump animation (short)
         botBtn.classList.add('jump');
         setTimeout(() => {
             botBtn.classList.remove('jump');
         }, 600);
+
+        // Show hint bubble (longer - 5 seconds)
+        botBtn.classList.add('show-bubble');
+        setTimeout(() => {
+            botBtn.classList.remove('show-bubble');
+        }, 8000);
     }
 }, 15000); // 15 seconds
 
