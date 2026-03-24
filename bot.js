@@ -125,6 +125,44 @@ const modalData = {
                 <li>מכשירים שאינם עומדים בדרישות התקינה או הבטיחות עלולים להיעצר במכס לצורך בדיקה או להישלח חזרה לחו"ל.</li>
                 <li><strong>💡 דגש:</strong> ייבוא אישי של מכשיר חשמל נכלל בתוך תקרת הפטור של $200 (למעט הלבשה והנעלה לשימוש עצמי).</li>
             </ul>`
+    },
+    // --- Conditional Approval Items ---
+    'drones': {
+        icon: '🚁',
+        title: 'רחפנים וציוד טיסה',
+        body: `ייבוא רחפנים לישראל דורש עמידה בדרישות משרד התקשורת ורשות התעופה האזרחית.
+            <ul>
+                <li>רחפנים הפועלים בתדרים מסוימים דורשים אישור מראש.</li>
+                <li>רחפנים למטרות צילום מקצועי עלולים להידרש באישור מסחרי.</li>
+            </ul>`
+    },
+    'autoParts': {
+        icon: '⚙️',
+        title: 'חלקי חילוף לרכב',
+        body: `חלקי חילוף לרכב מותנים באישור של משרד התחבורה.
+            <ul>
+                <li>קיימת הבחנה בין חלקי בטיחות (הדורשים אישור קפדני) לחלקים קוסמטיים.</li>
+            </ul>`
+    },
+    'satellite': {
+        icon: '🛰️',
+        title: 'מכשירי ניווט ולווין',
+        body: `מכשירי GPS מסוימים וטלפונים לוויניים דורשים אישור של משרד התקשורת.`
+    },
+    'medicine': {
+        icon: '💊',
+        title: 'תרופות ותכשירים',
+        body: `הכנסת תרופות בכמות החורגת מצריכה אישית סבירה דורשת אישור משרד הבריאות.`
+    },
+    'supplements': {
+        icon: '💪',
+        title: 'תוספי תזונה',
+        body: `ייבוא תוספי תזונה בכמויות מסחריות דורש אישור של משרד הבריאות ומכון התקנים.`
+    },
+    'proCameras': {
+        icon: '📸',
+        title: 'ציוד צילום מקצועי',
+        body: `ציוד צילום מקצועי המיועד למטרות עסקיות עלול להידרש במסלול האדום ובחיובי מס חברות.`
     }
 };
 
@@ -159,14 +197,20 @@ function openModal(type) {
 
     const footerNote = document.getElementById('modalFooterNote');
 
-    // Prohibited Items lists for emphasis
+    // Item Groups for Footer Logic
     const prohibitedIds = ['weapons', 'drugs', 'transmitters', 'plants', 'meat', 'electrical'];
+    const conditionalIds = ['drones', 'autoParts', 'satellite', 'medicine', 'supplements', 'proCameras'];
 
     if (prohibitedIds.includes(type)) {
-        footerNote.innerHTML = '🚫 <strong>פריט זה אסור לייבוא!</strong> אי ציות להנחיות עלול לגרור החרמה וקנס כבד.';
+        footerNote.innerHTML = '🚫 <strong>פריט זה אסור לייבוא!</strong> אי ציות עלול לגרור החרמה וקנס.';
         footerNote.style.color = '#C53030';
         footerNote.style.background = '#FFF5F5';
         footerNote.style.border = '1px solid #FC8181';
+    } else if (conditionalIds.includes(type)) {
+        footerNote.innerHTML = '⚠️ <strong>מותנה באישור!</strong> שחרור הפריט דורש אישור מגורם מוסמך.';
+        footerNote.style.color = '#B7791F';
+        footerNote.style.background = '#FFFFF0';
+        footerNote.style.border = '1px solid #F6E05E';
     } else {
         footerNote.innerHTML = '⚠️ הבאתם יותר מהמותר? חובה מסלול אדום! 🔴';
         footerNote.style.color = '#C53030';
@@ -188,46 +232,49 @@ function closeModal(e) {
     }
 }
 
-// --- Flip Logic ---
-let isProhibitedMode = false;
+// --- Multi-View Logic ---
+let currentViewMode = 'exempt';
 
-function toggleProhibited() {
-    isProhibitedMode = !isProhibitedMode;
-    const boxes = document.querySelectorAll('.quota-box');
-    const toggleBtn = document.getElementById('prohibitedToggle');
+function setViewMode(mode) {
+    currentViewMode = mode;
+    const grid = document.getElementById('quotasGrid');
+    const tabs = document.querySelectorAll('.view-tab');
     const sectionTitle = document.getElementById('sectionTitle');
 
-    boxes.forEach(box => {
-        if (isProhibitedMode) {
-            box.classList.add('flipped');
-        } else {
-            box.classList.remove('flipped');
+    // Update Grid Classes for 3D flip
+    if (grid) {
+        grid.className = 'grid-quotas view-' + mode;
+    }
+
+    // Update Tab Active States
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.classList.contains('tab-' + mode)) {
+            tab.classList.add('active');
         }
     });
 
-    if (isProhibitedMode) {
-        if (sectionTitle) sectionTitle.innerText = "🚫 פריטים אסורים בייבוא";
-        toggleBtn.innerText = '🟢 חזרה לפטורים';
-        toggleBtn.classList.add('active');
-    } else {
-        if (sectionTitle) sectionTitle.innerText = "✨ כמויות פטורות ממס";
-        toggleBtn.innerText = '🔴 פריטים אסורים';
-        toggleBtn.classList.remove('active');
+    // Update Titles
+    if (sectionTitle) {
+        if (mode === 'exempt') sectionTitle.innerText = "✨ כמויות פטורות ממס";
+        else if (mode === 'conditional') sectionTitle.innerText = "⚠️ יבוא מותנה באישור";
+        else if (mode === 'prohibited') sectionTitle.innerText = "🚫 פריטים אסורים בייבוא";
     }
 }
 
 function handleBoxClick(type) {
-    if (isProhibitedMode) {
-        // Map types to prohibited types
+    if (currentViewMode === 'prohibited') {
         const prohibitedMap = {
-            'alcohol': 'weapons',
-            'tobacco': 'drugs',
-            'vape': 'transmitters',
-            'perfume': 'plants',
-            'food': 'meat',
-            'clothes': 'electrical'
+            'alcohol': 'weapons', 'tobacco': 'drugs', 'vape': 'transmitters',
+            'perfume': 'plants', 'food': 'meat', 'clothes': 'electrical'
         };
         openModal(prohibitedMap[type]);
+    } else if (currentViewMode === 'conditional') {
+        const conditionalMap = {
+            'alcohol': 'drones', 'tobacco': 'autoParts', 'vape': 'satellite',
+            'perfume': 'medicine', 'food': 'supplements', 'clothes': 'proCameras'
+        };
+        openModal(conditionalMap[type]);
     } else {
         openModal(type);
     }

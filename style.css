@@ -390,84 +390,192 @@
             perspective: 1000px;
         }
 
+        /* View Control Styles */
+        .view-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 15px;
+            flex-wrap: nowrap;
+        }
+
+        .section-title {
+            margin-bottom: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        .view-selector {
+            display: flex;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .view-tab {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 9px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+            color: #4A5568;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .view-tab.active {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .view-tab.tab-exempt.active { color: #2F855A; }
+        .view-tab.tab-conditional.active { color: #B7791F; }
+        .view-tab.tab-prohibited.active { color: #C53030; }
+
+        /* Quota Box - General (supports 3 states) */
         .quota-box {
             position: relative;
-            width: 100%;
             height: 140px;
+            perspective: 1000px;
             cursor: pointer;
-            transition: transform 0.6s;
+        }
+
+        .quota-box-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
         }
 
-        .quota-box.flipped {
+        /* 3D Switching Logic - Refined to avoid overlap */
+        .grid-quotas.view-prohibited .quota-box-inner {
             transform: rotateY(180deg);
         }
 
-        .box-front, .box-back {
+        .grid-quotas.view-conditional .quota-box-inner {
+            transform: rotateX(180deg);
+        }
+
+        /* Hide the irrelevant layers to prevent "upside down" or mixed views */
+        .grid-quotas.view-exempt .box-back-prohibited,
+        .grid-quotas.view-exempt .box-back-conditional {
+            visibility: hidden;
+        }
+
+        .grid-quotas.view-prohibited .box-back-conditional,
+        .grid-quotas.view-prohibited .box-front {
+            visibility: hidden;
+        }
+
+        .grid-quotas.view-conditional .box-back-prohibited,
+        .grid-quotas.view-conditional .box-front {
+            visibility: hidden;
+        }
+
+        /* Show the active back side clearly */
+        .grid-quotas.view-prohibited .box-back-prohibited {
+            visibility: visible;
+            z-index: 10;
+        }
+
+        .grid-quotas.view-conditional .box-back-conditional {
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Views common styles */
+        .box-front, .box-back-prohibited, .box-back-conditional {
             position: absolute;
             width: 100%;
             height: 100%;
+            -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 12px;
+            align-items: center;
             border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             border: 2px solid #EDF2F7;
+            transition: visibility 0s; /* Instant switch of visibility to avoid ghosts */
         }
 
+        /* Exempt (Green) */
         .box-front {
-            background: #F0FFF4;
+            background-color: #F0FFF4;
             border-color: #C6F6D5;
         }
 
-        .box-front h3 {
-            color: #22543D;
-        }
-
-        .box-back {
-            background: #FFF5F5;
+        /* Prohibited (Red) */
+        .box-back-prohibited {
+            background-color: #FFF5F5;
             border-color: #FED7D7;
             transform: rotateY(180deg);
         }
 
-        .box-back .icon-circle {
-            background: #FEB2B2;
-            color: #C53030;
+        /* Conditional (Yellow) */
+        .box-back-conditional {
+            background-color: #FFFFF0;
+            border-color: #FEFCBF;
+            transform: rotateX(180deg);
         }
 
-        .box-back h3 {
-            color: #9B2C2C;
-        }
-
-        .prohibited-btn {
-            background: #E53E3E;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            margin-bottom: 15px;
+        .icon-circle {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
-            transition: all 0.2s;
-            width: fit-content;
-            margin: 0 auto 15px;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .prohibited-btn:hover {
-            background: #C53030;
-            transform: scale(1.05);
+        .quota-box h3 {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: #2D3748;
         }
 
-        .prohibited-btn.active {
-            background: #4A5568;
-            box-shadow: none;
+        .quota-box-mobile-hint {
+            font-size: 11px;
+            font-weight: 700;
+            color: #4A5568;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 480px) {
+            .view-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .view-selector {
+                width: 100%;
+                justify-content: stretch;
+            }
+            .view-tab {
+                flex: 1;
+                justify-content: center;
+                padding: 10px 4px;
+                font-size: 11px;
+            }
         }
 
         .quota-box-mobile-hint {
