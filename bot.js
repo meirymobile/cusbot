@@ -49,14 +49,15 @@ const modalData = {
     },
     'clothes': {
         icon: '👕',
-        title: 'הלבשה, הנהלה וקוסמטיקה',
-        body: `כמויות מסוג זה נכללות בפטור הכולל של עד $200 (ביחד עם שאר הפריטים).
+        title: 'הלבשה והנעלה',
+        body: `הנחיות הפטור להלבשה והנעלה:
             <ul>
-                <li>מותר להביא בגדים, נעליים ומוצרים קוסמטיים אשר <strong>אינם חורגים מהכמות הסבירה והמקובלת לשימוש אישי של הנוסע</strong>.</li>
+                <li><strong>לשימוש עצמי:</strong> פריטי הלבשה והנעלה המיועדים לשימושכם העצמי - פטורים ואינם מוגבלים בסכום.</li>
+                <li><strong>מתנות ופריטים אחרים:</strong> פריטים שאינם לשימושכם העצמי נכללים במכסה הכללית של עד $200.</li>
             </ul>
             <div class="example-box">
-                <strong>💡 דוגמה:</strong><br>
-                אם המזוודה שלכם מכילה 15 חולצות חדשות וזהות, הדבר מעלה חשד לייבוא מסחרי. יש לעבור במסלול האדום להצהרה, גם אם העלות לא עוברת את הרף.
+                <strong>💡 דגש:</strong><br>
+                גם בפריטים לשימוש אישי, על הכמות להיות סבירה לצרכיו של הנוסע. כמות מסחרית (למשל 20 חולצות זהות) עלולה להיחשב לייבוא מסחרי ולחייב תשלום מס.
             </div>`
     },
     'food': {
@@ -72,8 +73,78 @@ const modalData = {
                 <strong>💡 דוגמה:</strong><br>
                 מותר להביא 1 ק"ג שוקולד + 1 ק"ג פסטה + 1 ק"ג אגוזים. אבל אם תביאו 2 ק"ג מאותו סוג, עברתם את המכסה המותרת.
             </div>`
+    },
+    // --- Prohibited Items Modal Data ---
+    'weapons': {
+        icon: '🔫',
+        title: 'נשק ותחמושת',
+        body: `איסור ייבוא נשק, תחמושת וחומרים נפצים ללא היתר מיוחד מהמשרד לביטחון לאומי וצה"ל.
+            <ul>
+                <li>נשק קר (סכינים, אגרופנים) מסוימים גם הם אסורים.</li>
+                <li>צעצועים הנראים כנשק אמיתי עלולים להיחשב כאסורים.</li>
+            </ul>`
+    },
+    'drugs': {
+        icon: '💉',
+        title: 'סמים וחומרים מסוכנים',
+        body: `איסור גורף על ייבוא סמים מסוכנים.
+            <ul>
+                <li>כולל קנאביס (גם רפואי) ללא היתר משרד הבריאות.</li>
+                <li>חומרים פסיכואקטיביים .</li>
+            </ul>`
+    },
+    'transmitters': {
+        icon: '📻',
+        title: 'מכשירי שידור וקשר',
+        body: `ייבוא מכשירי קשר, רחפנים מסוימים וציוד תקשורת דורש אישור של משרד התקשורת.
+            <ul>
+                <li>ציוד שאינו עומד בתקן הישראלי עלול לחסום תדרים חירום ולכן יוחרם.</li>
+            </ul>`
+    },
+    'plants': {
+        icon: '🌱',
+        title: 'צמחים וזרעים',
+        body: `חל איסור מוחלט על הכנסת חומר צמחי (שתילים, זרעים, פקעות) ללא היתר ייבוא ותעודת בריאות מהמדינה המקורית.
+            <ul>
+                <li>מטרת האיסור: מניעת חדירת מזיקים ומחלות לצמחייה בישראל.</li>
+            </ul>`
+    },
+    'meat': {
+        icon: '🥩',
+        title: 'מוצרי בשר ומוצרים מהחי',
+        body: `איסור על ייבוא מוצרי בשר (טריים או מעובדים) ומוצרי חלב מחו"ל (למעט שימורים מסוימים).
+            <ul>
+                <li>משרד החקלאות מחרים מוצרים אלו למניעת מחלות בעלי חיים.</li>
+            </ul>`
+    },
+    'lasers': {
+        icon: '🔦',
+        title: 'סמני לייזר ומכון התקנים',
+        body: `סמני לייזר בעוצמה גבוהה ומוצרי חשמל שאינם עומדים בתקן הישראלי.
+            <ul>
+                <li>מוצרים ללא תו תקן ישראלי או בטיחות מינימלית עלולים להיות מוחרמים על ידי המכס בתיאום עם מכון התקנים.</li>
+            </ul>`
     }
 };
+
+// --- Legal Overlay Acceptance ---
+function acceptLegalTerms() {
+    const overlay = document.getElementById('legalOverlay');
+    const body = document.body;
+    const runwayScene = document.querySelector('.runway-scene');
+
+    if (overlay) overlay.style.opacity = '0';
+    
+    setTimeout(() => {
+        if (overlay) overlay.remove();
+        body.classList.remove('blur-mode');
+        
+        // Start the airplane animation
+        if (runwayScene) {
+            runwayScene.classList.add('animate-now');
+        }
+    }, 500);
+}
 
 const modal = document.getElementById('infoModal');
 
@@ -84,6 +155,23 @@ function openModal(type) {
     document.getElementById('modalIcon').innerHTML = data.icon;
     document.getElementById('modalTitle').innerText = data.title;
     document.getElementById('modalBody').innerHTML = data.body;
+
+    const footerNote = document.getElementById('modalFooterNote');
+
+    // Prohibited Items lists for emphasis
+    const prohibitedIds = ['weapons', 'drugs', 'transmitters', 'plants', 'meat', 'lasers'];
+
+    if (prohibitedIds.includes(type)) {
+        footerNote.innerHTML = '🚫 <strong>פריט זה אסור לייבוא!</strong> אי ציות להנחיות עלול לגרור החרמה וקנס כבד.';
+        footerNote.style.color = '#C53030';
+        footerNote.style.background = '#FFF5F5';
+        footerNote.style.border = '1px solid #FC8181';
+    } else {
+        footerNote.innerHTML = '⚠️ הבאתם יותר מהמותר? חובה מסלול אדום! 🔴';
+        footerNote.style.color = '#C53030';
+        footerNote.style.background = '#FFF5F5';
+        footerNote.style.border = '1px dashed #FC8181';
+    }
 
     modal.classList.add('active');
 }
@@ -98,6 +186,60 @@ function closeModal(e) {
         modal.classList.remove('active');
     }
 }
+
+// --- Flip Logic ---
+let isProhibitedMode = false;
+
+function toggleProhibited() {
+    isProhibitedMode = !isProhibitedMode;
+    const boxes = document.querySelectorAll('.quota-box');
+    const toggleBtn = document.getElementById('prohibitedToggle');
+
+    boxes.forEach(box => {
+        if (isProhibitedMode) {
+            box.classList.add('flipped');
+        } else {
+            box.classList.remove('flipped');
+        }
+    });
+
+    if (isProhibitedMode) {
+        toggleBtn.innerText = '🟢 חזרה לפטורים';
+        toggleBtn.classList.add('active');
+    } else {
+        toggleBtn.innerText = '🔴 פריטים אסורים';
+        toggleBtn.classList.remove('active');
+    }
+}
+
+function handleBoxClick(type) {
+    if (isProhibitedMode) {
+        // Map types to prohibited types
+        const prohibitedMap = {
+            'alcohol': 'weapons',
+            'tobacco': 'drugs',
+            'vape': 'transmitters',
+            'perfume': 'plants',
+            'food': 'meat',
+            'clothes': 'lasers'
+        };
+        openModal(prohibitedMap[type]);
+    } else {
+        openModal(type);
+    }
+}
+
+// --- Bot Jumping Logic ---
+const botBtn = document.getElementById('botBtn');
+setInterval(() => {
+    if (botBtn) {
+        botBtn.classList.add('jump');
+        setTimeout(() => {
+            botBtn.classList.remove('jump');
+        }, 600);
+    }
+}, 15000); // 15 seconds
+
 
 // --- Bot Logic ---
 const chatWindow = document.getElementById('chatWindow');
@@ -143,11 +285,16 @@ function addMessage(text, sender) {
 
 function handleQuickReply(text) {
     addMessage(text, 'user');
+
     // Hide quick replies after selection
     const quickReplies = document.querySelector('.quick-replies');
     if (quickReplies) quickReplies.style.display = 'none';
 
-    setTimeout(() => processBotResponse(text), 600);
+    showTypingIndicator();
+    setTimeout(() => {
+        hideTypingIndicator();
+        processBotResponse(text);
+    }, 1200);
 }
 
 function sendUserMsg() {
@@ -156,9 +303,30 @@ function sendUserMsg() {
         addMessage(text, 'user');
         chatInput.value = '';
 
-        // Show typing indicator or delay response
-        setTimeout(() => processBotResponse(text), 600);
+        // Show typing indicator
+        showTypingIndicator();
+
+        // Delay response for realism
+        const delay = Math.min(1000 + text.length * 20, 3000);
+        setTimeout(() => {
+            hideTypingIndicator();
+            processBotResponse(text);
+        }, delay);
     }
+}
+
+function showTypingIndicator() {
+    const typing = document.createElement('div');
+    typing.className = 'typing';
+    typing.id = 'typingIndicator';
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    chatBody.appendChild(typing);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) indicator.remove();
 }
 
 // --- Food and Agriculture Dictionaries ---
@@ -410,6 +578,8 @@ function processBotResponse(text) {
         // Simple Small Talk & FAQ Extensions
         if (query.includes('היי') || query.includes('שלום')) {
             response = 'שלום! 👋 אני עוזר המכס הווירטואלי שלך. תוכל לשאול אותי שאלות כמו: "קניתי אייפון ב-900 דולר" או "כמה אלכוהול מותר ל-3 אנשים?". מה תרצה לבדוק?';
+        } else if (query.includes('מזומן') || query.includes('כסף') || query.includes('שקל') || query.includes('דולר')) {
+            response = '💰 <strong>דיווח על מזומנים:</strong> חובה לדווח על הכנסת כספים בסכום של <strong>50,000 ₪ ומעלה</strong>. <br>⚠️ במעברים יבשתיים חובת הדיווח היא מעל <strong>12,000 ₪</strong> (למעט מעבר אלנבי).';
         } else if (query.includes('משפחה') || query.includes('ביחד') || query.includes('לאחד')) {
             response = '💡 <strong>איחוד פטורים:</strong> חשוב לדעת - <strong>לא ניתן לאחד פטורים!</strong> אם זוג קונה טלוויזיה ב-300 דולר, הם לא יכולים "לחבר" את ה-200 של כל אחד. הם ישלמו מס על כל ה-300 דולר. הפטור של 200$ תקף רק למוצרים שערכם הבודד פחות מ-200$.';
         } else if (query.includes('תודה')) {

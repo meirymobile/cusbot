@@ -9,9 +9,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="blur-mode">
 
-    <div class="container">
+    <!-- Legal Disclaimer Overlay -->
+    <div class="legal-overlay" id="legalOverlay">
+        <div class="legal-card">
+            <div class="legal-icon">⚖️</div>
+            <h3>הבהרה משפטית טרם השימוש</h3>
+            <div class="legal-body">
+                המידע המוצג באתר זה נועד למטרת <strong>המחשה והכוונה כללית בלבד</strong>, ואינו מהווה תחליף ללשון החוק המלאה, לתקנות המכס הרשמיות או לייעוץ משפטי מקצועי.
+                <br><br>
+                שימוש במידע והסתמכות עליו (לרבות בחירת מסלול ירוק/אדום) הינם באחריותו הבלעדית של הנוסע. חובת הנוסע לברר ולבדוק את חוקיות הייבוא ועדכניות הפטורים מול רשויות המכס הרשמיות בטרם הכניסה לישראל. 
+                <br><br>
+                הנהלת האתר (CUS-DEMO) ורשויות החוק לא ישאו באחריות לכל נזק, קנס או החרמה הנובעים מהסתמכות על מידע זה.
+            </div>
+            <button class="legal-btn" onclick="acceptLegalTerms()">הבנתי, המשך לאתר</button>
+        </div>
+    </div>
+
+    <div class="container main-content-wrapper">
         <header>
 
             <!-- Animation scene - airplane landing on runway -->
@@ -85,46 +101,106 @@
             <div class="tag-price">200$</div>
             <div class="primary-text">
                 <h2>פטור אישי ממס</h2>
-                <p>על חפצים לשימוש עצמי או מתנות (שאינם מפורטים מטה).</p>
+                <p>הלבשה והנעלה לשימוש עצמי - פטורות ואינן מוגבלות בסכום.</p>
+                <p>חפצים שאינם לשימוש עצמי נכללים בפטור של עד $200.</p>
                 <div class="personal-note">💡 הפטור הוא אישי ולא ניתן להעברה!</div>
             </div>
         </div>
 
         <!-- Quantity limits in grid style -->
         <div class="card delay-2">
-            <div class="section-title">✨ כמויות פטורות ממס (מעל גיל 18)</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div class="section-title" style="margin-bottom: 0;">✨ כמויות פטורות ממס</div>
+                <button class="prohibited-btn" id="prohibitedToggle" onclick="toggleProhibited()">
+                    🔴 פריטים אסורים
+                </button>
+            </div>
+
             <div class="grid-quotas">
-                <div class="quota-box" onclick="openModal('alcohol')">
-                    <div class="icon-circle bg-wine">🍷</div>
-                    <h3>אלכוהול</h3>
-                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
-                </div>
-                <div class="quota-box" onclick="openModal('tobacco')">
-                    <div class="icon-circle bg-smoke">🚬</div>
-                    <h3>טבק וסיגריות</h3>
-                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
-                </div>
-                <div class="quota-box" onclick="openModal('vape')">
-                    <div class="icon-circle bg-vape">
-                        <img src="vape-icon.png" alt="vape" style="width: 34px; height: 34px; object-fit: contain;">
+                <!-- Alcohol -->
+                <div class="quota-box" id="box-alcohol" onclick="handleBoxClick('alcohol')">
+                    <div class="box-front">
+                        <div class="icon-circle bg-wine">🍷</div>
+                        <h3>אלכוהול</h3>
+                        <span class="quota-box-mobile-hint">👆 לפירוט</span>
                     </div>
-                    <h3>סיגריה אלקטרונית</h3>
-                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+                    <div class="box-back">
+                        <div class="icon-circle">🔫</div>
+                        <h3>נשק ותחמושת</h3>
+                        <span class="quota-box-mobile-hint">❌ אסור בהחלט</span>
+                    </div>
                 </div>
-                <div class="quota-box" onclick="openModal('perfume')">
-                    <div class="icon-circle bg-perfume">✨</div>
-                    <h3>בשמים ותמרוקים</h3>
-                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+
+                <!-- Tobacco -->
+                <div class="quota-box" id="box-tobacco" onclick="handleBoxClick('tobacco')">
+                    <div class="box-front">
+                        <div class="icon-circle bg-smoke">🚬</div>
+                        <h3>טבק וסיגריות</h3>
+                        <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                    </div>
+                    <div class="box-back">
+                        <div class="icon-circle">💉</div>
+                        <h3>סמים חריפים</h3>
+                        <span class="quota-box-mobile-hint">❌ אסור בהחלט</span>
+                    </div>
                 </div>
-                <div class="quota-box" onclick="openModal('food')">
-                    <div class="icon-circle bg-food">🍏</div>
-                    <h3>מזון וחקלאות</h3>
-                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+
+                <!-- Vape -->
+                <div class="quota-box" id="box-vape" onclick="handleBoxClick('vape')">
+                    <div class="box-front">
+                        <div class="icon-circle bg-vape">
+                            <img src="vape-icon.png" alt="vape" style="width: 34px; height: 34px; object-fit: contain;">
+                        </div>
+                        <h3>סיגריה אלקטרונית</h3>
+                        <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                    </div>
+                    <div class="box-back">
+                        <div class="icon-circle">📻</div>
+                        <h3>מכשירי שידור</h3>
+                        <span class="quota-box-mobile-hint">❌ ללא תקן</span>
+                    </div>
                 </div>
-                <div class="quota-box" onclick="openModal('clothes')">
-                    <div class="icon-circle bg-cloth">👕</div>
-                    <h3>הלבשה והנעלה</h3>
-                    <span class="quota-box-mobile-hint">👆 לחצו להרחבה ודוגמה</span>
+
+                <!-- Perfume -->
+                <div class="quota-box" id="box-perfume" onclick="handleBoxClick('perfume')">
+                    <div class="box-front">
+                        <div class="icon-circle bg-perfume">✨</div>
+                        <h3>בשמים</h3>
+                        <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                    </div>
+                    <div class="box-back">
+                        <div class="icon-circle">🌱</div>
+                        <h3>צמחים וזרעים</h3>
+                        <span class="quota-box-mobile-hint">❌ ללא היתר</span>
+                    </div>
+                </div>
+
+                <!-- Food -->
+                <div class="quota-box" id="box-food" onclick="handleBoxClick('food')">
+                    <div class="box-front">
+                        <div class="icon-circle bg-food">🍏</div>
+                        <h3>מזון </h3>
+                        <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                    </div>
+                    <div class="box-back">
+                        <div class="icon-circle">🥩</div>
+                        <h3>מוצרי בשר</h3>
+                        <span class="quota-box-mobile-hint">❌ אסור מהחי</span>
+                    </div>
+                </div>
+
+                <!-- Clothes -->
+                <div class="quota-box" id="box-clothes" onclick="handleBoxClick('clothes')">
+                    <div class="box-front">
+                        <div class="icon-circle bg-cloth">👕</div>
+                        <h3>הלבשה</h3>
+                        <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                    </div>
+                    <div class="box-back">
+                        <div class="icon-circle">🔦</div>
+                        <h3>סמני לייזר</h3>
+                        <span class="quota-box-mobile-hint">❌ לא תקני</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,7 +219,7 @@
             <div class="warning-text">
                 <h3>נכנסים עם כסף מזומן?</h3>
                 <p>חובה לדווח לפקיד המכס על סכום העולה על <span class="highlight-red">50,000 ₪</span>.</p>
-                <p style="font-size: 11px; margin-top: 4px; color: #9B2C2C;">(במעבר יבשתי: חובת דיווח מעל 12,000 ₪)</p>
+                <p style="font-size: 11px; margin-top: 4px; color: #9B2C2C;">(במעבר יבשתי: חובת דיווח מעל 12,000 ₪, למעט מעבר אלנבי)</p>
             </div>
         </div>
 
@@ -167,12 +243,20 @@
 
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <img src="Bot.png" alt="מכס בוט"
-                    style="width: 24px; height: 24px; object-fit: cover; border-radius: 50%; background: white;">
-                נציג מכס וירטואלי
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="position: relative;">
+                    <img src="Bot.png" alt="מכס בוט"
+                        style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%; background: white; border: 2px solid rgba(255,255,255,0.8);">
+                    <div
+                        style="position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: #48bb78; border-radius: 50%; border: 2px solid white;">
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 15px; font-weight: 800; line-height: 1.2;">נציג מכס וירטואלי</div>
+                    <div style="font-size: 11px; font-weight: 400; opacity: 0.9;">מקוון כרגע</div>
+                </div>
             </div>
-            <button onclick="toggleChat()">✕</button>
+            <button onclick="toggleChat()" aria-label="Close Chat">✕</button>
         </div>
         <div class="chat-body" id="chatBody">
             <div id="chatDisclaimer"
@@ -220,7 +304,7 @@
             <div class="modal-icon" id="modalIcon"></div>
             <div class="modal-title" id="modalTitle"></div>
             <div class="modal-body" id="modalBody"></div>
-            <div class="modal-footer-note">⚠️ הבאתם יותר מהמותר? חובה מסלול אדום! 🔴</div>
+            <div class="modal-footer-note" id="modalFooterNote">⚠️ הבאתם יותר מהמותר? חובה מסלול אדום! 🔴</div>
         </div>
     </div>
 
