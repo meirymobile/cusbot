@@ -977,30 +977,6 @@
             border: none; 
         }
 
-        /* Large Puff center */
-        .bot-bubble::before {
-            content: '';
-            position: absolute;
-            top: -18px;
-            left: 20px;
-            width: 35px;
-            height: 35px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        /* Small Puff side */
-        .bot-bubble::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            right: 15px;
-            width: 25px;
-            height: 25px;
-            background: white;
-            border-radius: 50%;
-        }
-
         /* The Small "Thinking" Bubbles (the tail) */
         .bot-bubble-tail {
             position: absolute;
