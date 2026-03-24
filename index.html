@@ -10,6 +10,7 @@
 </head>
 
 <body class="blur-mode">
+    <a href="#main-content" class="skip-link">דלג לתוכן המרכזי</a>
 
     <!-- Legal Disclaimer Overlay -->
     <div class="legal-overlay" id="legalOverlay">
@@ -29,11 +30,11 @@
         </div>
     </div>
 
-    <div class="container main-content-wrapper">
-        <header>
+    <div class="container main-content-wrapper" id="main-content" role="main">
+        <header role="banner">
 
             <!-- Animation scene - airplane landing on runway -->
-            <div class="runway-scene">
+            <div class="runway-scene" aria-hidden="true">
                 <!-- Background clouds -->
                 <div class="cloud cloud-1"></div>
                 <div class="cloud cloud-2"></div>
@@ -98,154 +99,168 @@
             <div class="subtitle">המדריך המהיר למכס</div>
         </header>
 
-        <!-- Main exemption -->
-        <div class="card primary-rule delay-1">
-            <div class="tag-price">200$</div>
-            <div class="primary-text">
-                <h2>פטור אישי ממס</h2>
-                <p>הלבשה והנעלה לשימוש עצמי - פטורות ואינן מוגבלות בסכום.</p>
-                <p>חפצים שאינם לשימוש עצמי נכללים בפטור של עד $200.</p>
-                <div class="personal-note">💡 הפטור הוא אישי ולא ניתן להעברה!</div>
-            </div>
-        </div>
+        <main id="main-content">
+            <!-- Main exemption -->
+            <section class="card primary-rule delay-1" aria-labelledby="primaryExemptionTitle">
+                <div class="tag-price" aria-label="סכום הפטור">200$</div>
+                <div class="primary-text">
+                    <h2 id="primaryExemptionTitle">פטור אישי ממס</h2>
+                    <p>הלבשה והנעלה לשימוש עצמי - פטורות ואינן מוגבלות בסכום.</p>
+                    <p>חפצים שאינם לשימוש עצמי נכללים בפטור של עד $200.</p>
+                    <div class="personal-note" role="note">💡 הפטור הוא אישי ולא ניתן להעברה!</div>
+                </div>
+            </section>
 
-        <!-- Quantity limits in grid style -->
-        <div class="card delay-2">
-            <div class="view-controls">
-                <div class="section-title" id="sectionTitle" style="margin-bottom: 0;">✨ כמויות פטורות ממס</div>
-                <button class="cycle-view-btn btn-exempt pulse" id="cycleViewBtn" onclick="cycleViewMode()">
-                    🟢 פריטים פטורים
-                </button>
-            </div>
+            <!-- Quantity limits in grid style -->
+            <section class="card delay-2" aria-labelledby="sectionTitle">
+                <div class="view-controls">
+                    <h2 class="section-title" id="sectionTitle" style="margin-bottom: 0;">✨ כמויות פטורות ממס</h2>
+                    <button class="cycle-view-btn btn-exempt pulse" id="cycleViewBtn" onclick="cycleViewMode()" 
+                            aria-label="בורר מצב תצוגה: פריטים פטורים. לחץ למעבר ליבוא מותנה.">
+                        🟢 פריטים פטורים
+                    </button>
+                </div>
 
-            <div class="grid-quotas" id="quotasGrid">
-                <!-- 1. Alcohol -->
-                <div class="quota-box" onclick="handleBoxClick('alcohol')">
-                    <div class="quota-box-inner">
-                        <div class="box-front">
-                            <div class="icon-circle">🍷</div>
-                            <h3>אלכוהול</h3>
-                            <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                <div class="grid-quotas view-exempt" id="quotasGrid" role="list">
+                    <!-- 1. Alcohol -->
+                    <div class="quota-box" onclick="handleBoxClick('alcohol')" 
+                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('alcohol')"
+                         aria-label="אלכוהול - פטורים ואיסורים">
+                        <div class="quota-box-inner">
+                            <div class="box-front">
+                                <div class="icon-circle" aria-hidden="true">🍷</div>
+                                <h3>אלכוהול</h3>
+                                <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                            </div>
+                            <div class="box-back-prohibited">
+                                <div class="icon-circle" aria-hidden="true">🔫</div>
+                                <h3>נשק ותחמושת</h3>
+                                <span class="quota-box-mobile-hint">❌ אסור בהחלט</span>
+                            </div>
+                            <div class="box-back-conditional">
+                                <div class="icon-circle" aria-hidden="true">🚁</div>
+                                <h3>רחפנים</h3>
+                                <span class="quota-box-mobile-hint">⚠️ אישור תקשורת</span>
+                            </div>
                         </div>
-                        <div class="box-back-prohibited">
-                            <div class="icon-circle">🔫</div>
-                            <h3>נשק ותחמושת</h3>
-                            <span class="quota-box-mobile-hint">❌ אסור בהחלט</span>
+                    </div>
+
+                    <!-- 2. Tobacco -->
+                    <div class="quota-box" onclick="handleBoxClick('tobacco')" 
+                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('tobacco')"
+                         aria-label="טבק וסיגריות - פטורים ואיסורים">
+                        <div class="quota-box-inner">
+                            <div class="box-front">
+                                <div class="icon-circle" aria-hidden="true">🚬</div>
+                                <h3>טבק וסיגריות</h3>
+                                <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                            </div>
+                            <div class="box-back-prohibited">
+                                <div class="icon-circle" aria-hidden="true">💉</div>
+                                <h3>סמים וחומרים</h3>
+                                <span class="quota-box-mobile-hint">❌ אסור בהחלט</span>
+                            </div>
+                            <div class="box-back-conditional">
+                                <div class="icon-circle" aria-hidden="true">⚙️</div>
+                                <h3>חלקי רכב</h3>
+                                <span class="quota-box-mobile-hint">⚠️ אישור תחבורה</span>
+                            </div>
                         </div>
-                        <div class="box-back-conditional">
-                            <div class="icon-circle">🚁</div>
-                            <h3>רחפנים</h3>
-                            <span class="quota-box-mobile-hint">⚠️ אישור תקשורת</span>
+                    </div>
+
+                    <!-- 3. Vape -->
+                    <div class="quota-box" onclick="handleBoxClick('vape')" 
+                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('vape')"
+                         aria-label="סיגריות אלקטרוניות - פטורים ואיסורים">
+                        <div class="quota-box-inner">
+                            <div class="box-front">
+                                <div class="icon-circle" aria-hidden="true">💨</div>
+                                <h3>סיגריות אלק'</h3>
+                                <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                            </div>
+                            <div class="box-back-prohibited">
+                                <div class="icon-circle" aria-hidden="true">📻</div>
+                                <h3>מכשירי קשר</h3>
+                                <span class="quota-box-mobile-hint">❌ דורש אישור</span>
+                            </div>
+                            <div class="box-back-conditional">
+                                <div class="icon-circle" aria-hidden="true">🛰️</div>
+                                <h3>ציוד לווין</h3>
+                                <span class="quota-box-mobile-hint">⚠️ אישור מיוחד</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Perfume -->
+                    <div class="quota-box" onclick="handleBoxClick('perfume')" 
+                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('perfume')"
+                         aria-label="בשמים - פטורים ואיסורים">
+                        <div class="quota-box-inner">
+                            <div class="box-front">
+                                <div class="icon-circle" aria-hidden="true">✨</div>
+                                <h3>בשמים</h3>
+                                <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                            </div>
+                            <div class="box-back-prohibited">
+                                <div class="icon-circle" aria-hidden="true">🌱</div>
+                                <h3>צמחים וזרעים</h3>
+                                <span class="quota-box-mobile-hint">❌ דורש אישור</span>
+                            </div>
+                            <div class="box-back-conditional">
+                                <div class="icon-circle" aria-hidden="true">💊</div>
+                                <h3>תרופות</h3>
+                                <span class="quota-box-mobile-hint">⚠️ כמות חריגה</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Food -->
+                    <div class="quota-box" onclick="handleBoxClick('food')" 
+                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('food')"
+                         aria-label="מזון - פטורים ואיסורים">
+                        <div class="quota-box-inner">
+                            <div class="box-front">
+                                <div class="icon-circle" aria-hidden="true">🍏</div>
+                                <h3>מזון</h3>
+                                <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                            </div>
+                            <div class="box-back-prohibited">
+                                <div class="icon-circle" aria-hidden="true">🥩</div>
+                                <h3>מוצרי בשר</h3>
+                                <span class="quota-box-mobile-hint">❌ אסור מהחי</span>
+                            </div>
+                            <div class="box-back-conditional">
+                                <div class="icon-circle" aria-hidden="true">💪</div>
+                                <h3>תוספי תזונה</h3>
+                                <span class="quota-box-mobile-hint">⚠️ אישור בריאות</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Clothes -->
+                    <div class="quota-box" onclick="handleBoxClick('clothes')" 
+                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('clothes')"
+                         aria-label="הלבשה - פטורים ואיסורים">
+                        <div class="quota-box-inner">
+                            <div class="box-front">
+                                <div class="icon-circle" aria-hidden="true">👕</div>
+                                <h3>הלבשה</h3>
+                                <span class="quota-box-mobile-hint">👆 לפירוט</span>
+                            </div>
+                            <div class="box-back-prohibited">
+                                <div class="icon-circle" aria-hidden="true">🔌</div>
+                                <h3>מכשירי חשמל</h3>
+                                <span class="quota-box-mobile-hint">❌ דורש תקן</span>
+                            </div>
+                            <div class="box-back-conditional">
+                                <div class="icon-circle" aria-hidden="true">📸</div>
+                                <h3>ציוד צילום</h3>
+                                <span class="quota-box-mobile-hint">⚠️ אישור מסחרי</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 2. Tobacco -->
-                <div class="quota-box" onclick="handleBoxClick('tobacco')">
-                    <div class="quota-box-inner">
-                        <div class="box-front">
-                            <div class="icon-circle">🚬</div>
-                            <h3>טבק וסיגריות</h3>
-                            <span class="quota-box-mobile-hint">👆 לפירוט</span>
-                        </div>
-                        <div class="box-back-prohibited">
-                            <div class="icon-circle">💉</div>
-                            <h3>סמים וחומרים</h3>
-                            <span class="quota-box-mobile-hint">❌ אסור בהחלט</span>
-                        </div>
-                        <div class="box-back-conditional">
-                            <div class="icon-circle">⚙️</div>
-                            <h3>חלקי רכב</h3>
-                            <span class="quota-box-mobile-hint">⚠️ אישור תחבורה</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Vape -->
-                <div class="quota-box" onclick="handleBoxClick('vape')">
-                    <div class="quota-box-inner">
-                        <div class="box-front">
-                            <div class="icon-circle">💨</div>
-                            <h3>סיגריות אלק'</h3>
-                            <span class="quota-box-mobile-hint">👆 לפירוט</span>
-                        </div>
-                        <div class="box-back-prohibited">
-                            <div class="icon-circle">📻</div>
-                            <h3>מכשירי קשר</h3>
-                            <span class="quota-box-mobile-hint">❌ דורש אישור</span>
-                        </div>
-                        <div class="box-back-conditional">
-                            <div class="icon-circle">🛰️</div>
-                            <h3>ציוד לווין</h3>
-                            <span class="quota-box-mobile-hint">⚠️ אישור מיוחד</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Perfume -->
-                <div class="quota-box" onclick="handleBoxClick('perfume')">
-                    <div class="quota-box-inner">
-                        <div class="box-front">
-                            <div class="icon-circle">✨</div>
-                            <h3>בשמים</h3>
-                            <span class="quota-box-mobile-hint">👆 לפירוט</span>
-                        </div>
-                        <div class="box-back-prohibited">
-                            <div class="icon-circle">🌱</div>
-                            <h3>צמחים וזרעים</h3>
-                            <span class="quota-box-mobile-hint">❌ דורש אישור</span>
-                        </div>
-                        <div class="box-back-conditional">
-                            <div class="icon-circle">💊</div>
-                            <h3>תרופות</h3>
-                            <span class="quota-box-mobile-hint">⚠️ כמות חריגה</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Food -->
-                <div class="quota-box" onclick="handleBoxClick('food')">
-                    <div class="quota-box-inner">
-                        <div class="box-front">
-                            <div class="icon-circle">🍏</div>
-                            <h3>מזון</h3>
-                            <span class="quota-box-mobile-hint">👆 לפירוט</span>
-                        </div>
-                        <div class="box-back-prohibited">
-                            <div class="icon-circle">🥩</div>
-                            <h3>מוצרי בשר</h3>
-                            <span class="quota-box-mobile-hint">❌ אסור מהחי</span>
-                        </div>
-                        <div class="box-back-conditional">
-                            <div class="icon-circle">💪</div>
-                            <h3>תוספי תזונה</h3>
-                            <span class="quota-box-mobile-hint">⚠️ אישור בריאות</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. Clothes -->
-                <div class="quota-box" onclick="handleBoxClick('clothes')">
-                    <div class="quota-box-inner">
-                        <div class="box-front">
-                            <div class="icon-circle">👕</div>
-                            <h3>הלבשה</h3>
-                            <span class="quota-box-mobile-hint">👆 לפירוט</span>
-                        </div>
-                        <div class="box-back-prohibited">
-                            <div class="icon-circle">🔌</div>
-                            <h3>מכשירי חשמל</h3>
-                            <span class="quota-box-mobile-hint">❌ דורש תקן</span>
-                        </div>
-                        <div class="box-back-conditional">
-                            <div class="icon-circle">📸</div>
-                            <h3>ציוד צילום</h3>
-                            <span class="quota-box-mobile-hint">⚠️ אישור מסחרי</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </section>
 
         <!-- Warning - Red path -->
         <div class="red-path-warning delay-3">

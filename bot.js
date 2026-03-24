@@ -256,9 +256,24 @@ function setViewMode(mode) {
     if (cycleBtn) {
         cycleBtn.classList.remove('pulse'); // Stop pulsing once clicked
         cycleBtn.className = 'cycle-view-btn btn-' + mode;
-        if (mode === 'exempt') cycleBtn.innerText = "🟢 פריטים פטורים";
-        else if (mode === 'conditional') cycleBtn.innerText = "⚠️ יבוא מותנה";
-        else if (mode === 'prohibited') cycleBtn.innerText = "🔴 פריטים אסורים";
+        
+        let modeLabel = "";
+        let nextMode = "";
+        if (mode === 'exempt') {
+            modeLabel = "פריטים פטורים";
+            nextMode = "יבוא מותנה";
+            cycleBtn.innerText = "🟢 " + modeLabel;
+        } else if (mode === 'conditional') {
+            modeLabel = "יבוא מותנה";
+            nextMode = "פריטים אסורים";
+            cycleBtn.innerText = "⚠️ " + modeLabel;
+        } else if (mode === 'prohibited') {
+            modeLabel = "פריטים אסורים";
+            nextMode = "פריטים פטורים";
+            cycleBtn.innerText = "🔴 " + modeLabel;
+        }
+        
+        cycleBtn.setAttribute('aria-label', `מצב נוכחי: ${modeLabel}. לחץ למעבר למצב ${nextMode}.`);
     }
 
     // Update Titles
