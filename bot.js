@@ -117,12 +117,13 @@ const modalData = {
                 <li>משרד החקלאות מחרים מוצרים אלו למניעת מחלות בעלי חיים.</li>
             </ul>`
     },
-    'lasers': {
-        icon: '🔦',
-        title: 'סמני לייזר ומכון התקנים',
-        body: `סמני לייזר בעוצמה גבוהה ומוצרי חשמל שאינם עומדים בתקן הישראלי.
+    'electrical': {
+        icon: '🔌',
+        title: 'מכשירי חשמל ותקינה',
+        body: `ייבוא מכשירי חשמל המחויבים בעמידה במבחני בטיחות ודרישות מכון התקנים הישראלי.
             <ul>
-                <li>מוצרים ללא תו תקן ישראלי או בטיחות מינימלית עלולים להיות מוחרמים על ידי המכס בתיאום עם מכון התקנים.</li>
+                <li>מכשירים שאינם עומדים בדרישות התקינה או הבטיחות עלולים להיעצר במכס לצורך בדיקה או להישלח חזרה לחו"ל.</li>
+                <li><strong>💡 דגש:</strong> ייבוא אישי של מכשיר חשמל נכלל בתוך תקרת הפטור של $200 (למעט הלבשה והנעלה לשימוש עצמי).</li>
             </ul>`
     }
 };
@@ -159,7 +160,7 @@ function openModal(type) {
     const footerNote = document.getElementById('modalFooterNote');
 
     // Prohibited Items lists for emphasis
-    const prohibitedIds = ['weapons', 'drugs', 'transmitters', 'plants', 'meat', 'lasers'];
+    const prohibitedIds = ['weapons', 'drugs', 'transmitters', 'plants', 'meat', 'electrical'];
 
     if (prohibitedIds.includes(type)) {
         footerNote.innerHTML = '🚫 <strong>פריט זה אסור לייבוא!</strong> אי ציות להנחיות עלול לגרור החרמה וקנס כבד.';
@@ -221,7 +222,7 @@ function handleBoxClick(type) {
             'vape': 'transmitters',
             'perfume': 'plants',
             'food': 'meat',
-            'clothes': 'lasers'
+            'clothes': 'electrical'
         };
         openModal(prohibitedMap[type]);
     } else {
