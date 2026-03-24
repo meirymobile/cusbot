@@ -234,11 +234,17 @@ function closeModal(e) {
 
 // --- Multi-View Logic ---
 let currentViewMode = 'exempt';
+const modes = ['exempt', 'conditional', 'prohibited'];
+
+function cycleViewMode() {
+    let nextIndex = (modes.indexOf(currentViewMode) + 1) % modes.length;
+    setViewMode(modes[nextIndex]);
+}
 
 function setViewMode(mode) {
     currentViewMode = mode;
     const grid = document.getElementById('quotasGrid');
-    const tabs = document.querySelectorAll('.view-tab');
+    const cycleBtn = document.getElementById('cycleViewBtn');
     const sectionTitle = document.getElementById('sectionTitle');
 
     // Update Grid Classes for 3D flip
@@ -246,13 +252,14 @@ function setViewMode(mode) {
         grid.className = 'grid-quotas view-' + mode;
     }
 
-    // Update Tab Active States
-    tabs.forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.classList.contains('tab-' + mode)) {
-            tab.classList.add('active');
-        }
-    });
+    // Update Cycle Button
+    if (cycleBtn) {
+        cycleBtn.classList.remove('pulse'); // Stop pulsing once clicked
+        cycleBtn.className = 'cycle-view-btn btn-' + mode;
+        if (mode === 'exempt') cycleBtn.innerText = "🟢 פריטים פטורים";
+        else if (mode === 'conditional') cycleBtn.innerText = "⚠️ יבוא מותנה";
+        else if (mode === 'prohibited') cycleBtn.innerText = "🔴 פריטים אסורים";
+    }
 
     // Update Titles
     if (sectionTitle) {
@@ -280,23 +287,36 @@ function handleBoxClick(type) {
     }
 }
 
-// --- Bot Jumping Logic ---
+// --- Bot Hint Cycle ---
+const botHints = [
+    "לחצו על הכפתור למעלה למידע על איסורי יבוא! 🔄",
+    "צריכים עזרה? שאלו אותי! 🤖",
+    "ידעתם שיש פטור של עד $200 לנוסע? 💰",
+    "אלכוהול וטבק? בדקו את הכמויות המותרות! 🍷"
+];
+let currentHintIndex = 0;
+
+// --- Bot Jumping & Hint Logic ---
 const botBtn = document.getElementById('botBtn');
+const botHintBubble = document.getElementById('botHintBubble');
+
 setInterval(() => {
     if (botBtn) {
-        // Jump animation (short)
+        // Jump animation
         botBtn.classList.add('jump');
-        setTimeout(() => {
-            botBtn.classList.remove('jump');
-        }, 600);
+        setTimeout(() => { botBtn.classList.remove('jump'); }, 600);
 
-        // Show hint bubble (longer - 5 seconds)
+        // Update Hint Text
+        if (botHintBubble) {
+            currentHintIndex = (currentHintIndex + 1) % botHints.length;
+            botHintBubble.innerHTML = botHints[currentHintIndex] + '<div class="bot-bubble-tail"></div>';
+        }
+
+        // Show bubble
         botBtn.classList.add('show-bubble');
-        setTimeout(() => {
-            botBtn.classList.remove('show-bubble');
-        }, 8000);
+        setTimeout(() => { botBtn.classList.remove('show-bubble'); }, 8000);
     }
-}, 15000); // 15 seconds
+}, 15000);
 
 
 // --- Bot Logic ---

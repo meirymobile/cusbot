@@ -113,11 +113,9 @@
         <div class="card delay-2">
             <div class="view-controls">
                 <div class="section-title" id="sectionTitle" style="margin-bottom: 0;">✨ כמויות פטורות ממס</div>
-                <div class="view-selector">
-                    <button class="view-tab tab-exempt active" onclick="setViewMode('exempt')">🟢 פטורים</button>
-                    <button class="view-tab tab-conditional" onclick="setViewMode('conditional')">⚠️ מותנים</button>
-                    <button class="view-tab tab-prohibited" onclick="setViewMode('prohibited')">🔴 אסורים</button>
-                </div>
+                <button class="cycle-view-btn btn-exempt pulse" id="cycleViewBtn" onclick="cycleViewMode()">
+                    🟢 פריטים פטורים
+                </button>
             </div>
 
             <div class="grid-quotas" id="quotasGrid">
