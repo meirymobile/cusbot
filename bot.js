@@ -218,7 +218,7 @@ function openModal(type) {
 
     // Item Groups for Footer Logic
     const prohibitedIds = ['weapons', 'drugs', 'transmitters', 'plants', 'meat', 'electrical'];
-    const conditionalIds = ['drones', 'autoParts', 'satellite', 'medicine', 'supplements', 'proCameras'];
+    const conditionalIds = ['drones', 'autoParts', 'laser', 'helmets', 'wireless', 'electricVehicles'];
 
     if (prohibitedIds.includes(type)) {
         footerNote.innerHTML = '🚫 <strong>פריט זה אסור לייבוא!</strong> אי ציות עלול לגרור החרמה וקנס.';
