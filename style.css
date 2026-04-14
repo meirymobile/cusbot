@@ -1079,10 +1079,6 @@
         }
 
         @media (max-width: 380px) {
-            .container {
-                gap: 10px;
-            }
-
             .card {
                 padding: 14px;
             }
