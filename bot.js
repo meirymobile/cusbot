@@ -86,19 +86,21 @@ const modalData = {
     },
     'dangerousDrugs': {
         icon: '💉',
-        title: 'סמים מסוכנים',
-        body: `איסור גורף על ייבוא סמים מסוכנים המופיעים בפקודת הסמים.
+        title: 'סמים ומכשירי עישון',
+        body: `איסור גורף על ייבוא סמים מסוכנים וכלים המיועדים לשימוש בהם.
             <ul>
                 <li><strong>קנאביס:</strong> כולל קנאביס רפואי - חל איסור גורף על ייבוא, <strong>גם אם</strong> קיים היתר פרטני ממשרד הבריאות.</li>
+                <li><strong>כלים לשימוש בסם:</strong> חל איסור מוחלט על ייבוא באנגים, מקטרות ייעודיות וכל כלי שעיקר שימושו הוא לצריכת סם מסוכן.</li>
                 <li><strong>ענישה:</strong> עבירות סמים גוררות הליכים פליליים חמורים.</li>
             </ul>`
     },
-    'drugTools': {
-        icon: '🏺',
-        title: 'כלים לשימוש בסם',
-        body: `על פי פקודת הסמים המסוכנים, חל איסור מוחלט על ייבוא כלים המיועדים לשימוש בסמים.
+    'dairyAndFormula': {
+        icon: '🥛',
+        title: 'מוצרי חלב ומזון לתינוקות',
+        body: `איסור על ייבוא מוצרי חלב ותרכובות מזון לתינוקות מחו"ל.
             <ul>
-                <li><strong>פריטים:</strong> כולל באנגים, מקטרות ייעודיות וכל כלי שעיקר שימושו הוא לצריכת סם מסוכן.</li>
+                <li><strong>מוצרי חלב:</strong> חל איסור גורף למעט גבינות קשות (עד 1 ק"ג).</li>
+                <li><strong>מזון לתינוקות:</strong> חל איסור על ייבוא תרכובות מזון לתינוקות (תמ"ל).</li>
             </ul>`
     },
     'plants': {
@@ -112,10 +114,8 @@ const modalData = {
     'meat': {
         icon: '🥩',
         title: 'מוצרי בשר ומוצרים מהחי',
-        body: `איסור על ייבוא מוצרי בשר ומוצרי חלב מחו"ל (למעט שימורים מסוימים וגבינות קשות).
+        body: `איסור על ייבוא מוצרי בשר ומוצרים מהחי.
             <ul>
-                <li><strong>מוצרי חלב:</strong> חל איסור גורף למעט גבינות קשות (עד 1 ק"ג).</li>
-                <li><strong>מזון לתינוקות:</strong> חל איסור על ייבוא תרכובות מזון לתינוקות (תמ"ל).</li>
                 <li>משרד החקלאות מחרים מוצרים אלו למניעת מחלות בעלי חיים וסיכונים בריאותיים.</li>
             </ul>`
     },
@@ -218,7 +218,7 @@ function openModal(type) {
     const footerNote = document.getElementById('modalFooterNote');
 
     // Item Groups for Footer Logic
-    const prohibitedIds = ['weapons', 'dangerousDrugs', 'drugTools', 'plants', 'meat', 'produce'];
+    const prohibitedIds = ['weapons', 'dangerousDrugs', 'dairyAndFormula', 'plants', 'meat', 'produce'];
     const conditionalIds = ['drones', 'autoParts', 'laser', 'helmets', 'wireless', 'electricVehicles'];
 
     if (prohibitedIds.includes(type)) {
@@ -307,7 +307,7 @@ function setViewMode(mode) {
 function handleBoxClick(type) {
     if (currentViewMode === 'prohibited') {
         const prohibitedMap = {
-            'alcohol': 'weapons', 'tobacco': 'dangerousDrugs', 'vape': 'drugTools',
+            'alcohol': 'weapons', 'tobacco': 'dangerousDrugs', 'vape': 'dairyAndFormula',
             'perfume': 'plants', 'food': 'meat', 'clothes': 'produce'
         };
         openModal(prohibitedMap[type]);
