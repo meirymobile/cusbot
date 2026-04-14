@@ -18,7 +18,8 @@
             <div class="legal-icon">⚖️</div>
             <h3>הבהרה משפטית טרם השימוש</h3>
             <div class="legal-body">
-                המידע המוצג באתר זה נועד למטרת <strong>המחשה והכוונה כללית בלבד</strong>, ואינו מהווה תחליף ללשון החוק
+                המידע המוצג באתר זה הינו חלקי ונועד למטרת <strong>המחשה והכוונה כללית בלבד</strong>, ואינו מהווה תחליף
+                ללשון החוק
                 המלאה, לתקנות המכס הרשמיות או לייעוץ משפטי מקצועי.
                 <br><br>
                 שימוש במידע והסתמכות עליו (לרבות בחירת מסלול ירוק/אדום) הינם באחריותו הבלעדית של הנוסע. חובת הנוסע לברר
@@ -115,17 +116,17 @@
             <section class="card delay-2" aria-labelledby="sectionTitle">
                 <div class="view-controls">
                     <h2 class="section-title" id="sectionTitle" style="margin-bottom: 0;">✨ כמויות פטורות ממס</h2>
-                    <button class="cycle-view-btn btn-exempt pulse" id="cycleViewBtn" onclick="cycleViewMode()" 
-                            aria-label="בורר מצב תצוגה: פריטים פטורים. לחץ למעבר ליבוא מותנה.">
+                    <button class="cycle-view-btn btn-exempt pulse" id="cycleViewBtn" onclick="cycleViewMode()"
+                        aria-label="בורר מצב תצוגה: פריטים פטורים. לחץ למעבר ליבוא מותנה.">
                         🟢 פריטים פטורים
                     </button>
                 </div>
 
                 <div class="grid-quotas view-exempt" id="quotasGrid" role="list">
                     <!-- 1. Alcohol -->
-                    <div class="quota-box" onclick="handleBoxClick('alcohol')" 
-                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('alcohol')"
-                         aria-label="אלכוהול - פטורים ואיסורים">
+                    <div class="quota-box" onclick="handleBoxClick('alcohol')" role="listitem" tabindex="0"
+                        onkeypress="if(event.key==='Enter')handleBoxClick('alcohol')"
+                        aria-label="אלכוהול - פטורים ואיסורים">
                         <div class="quota-box-inner">
                             <div class="box-front">
                                 <div class="icon-circle" aria-hidden="true">🍷</div>
@@ -146,9 +147,9 @@
                     </div>
 
                     <!-- 2. Tobacco -->
-                    <div class="quota-box" onclick="handleBoxClick('tobacco')" 
-                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('tobacco')"
-                         aria-label="טבק וסיגריות - פטורים ואיסורים">
+                    <div class="quota-box" onclick="handleBoxClick('tobacco')" role="listitem" tabindex="0"
+                        onkeypress="if(event.key==='Enter')handleBoxClick('tobacco')"
+                        aria-label="טבק וסיגריות - פטורים ואיסורים">
                         <div class="quota-box-inner">
                             <div class="box-front">
                                 <div class="icon-circle" aria-hidden="true">🚬</div>
@@ -169,13 +170,14 @@
                     </div>
 
                     <!-- 3. Vape -->
-                    <div class="quota-box" onclick="handleBoxClick('vape')" 
-                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('vape')"
-                         aria-label="סיגריות אלקטרוניות - פטורים ואיסורים">
+                    <div class="quota-box" onclick="handleBoxClick('vape')" role="listitem" tabindex="0"
+                        onkeypress="if(event.key==='Enter')handleBoxClick('vape')"
+                        aria-label="סיגריות אלקטרוניות - פטורים ואיסורים">
                         <div class="quota-box-inner">
                             <div class="box-front">
                                 <div class="icon-circle" aria-hidden="true" style="padding: 2px;">
-                                    <img src="vape-icon.png" alt="vape" style="width: 32px; height: 32px; object-fit: contain;">
+                                    <img src="vape-icon.png" alt="vape"
+                                        style="width: 32px; height: 32px; object-fit: contain;">
                                 </div>
                                 <h3>סיגריות אלק'</h3>
                                 <span class="quota-box-mobile-hint">👆 לפירוט</span>
@@ -194,9 +196,9 @@
                     </div>
 
                     <!-- 4. Perfume -->
-                    <div class="quota-box" onclick="handleBoxClick('perfume')" 
-                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('perfume')"
-                         aria-label="בשמים - פטורים ואיסורים">
+                    <div class="quota-box" onclick="handleBoxClick('perfume')" role="listitem" tabindex="0"
+                        onkeypress="if(event.key==='Enter')handleBoxClick('perfume')"
+                        aria-label="בשמים - פטורים ואיסורים">
                         <div class="quota-box-inner">
                             <div class="box-front">
                                 <div class="icon-circle" aria-hidden="true">✨</div>
@@ -217,9 +219,8 @@
                     </div>
 
                     <!-- 5. Food -->
-                    <div class="quota-box" onclick="handleBoxClick('food')" 
-                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('food')"
-                         aria-label="מזון - פטורים ואיסורים">
+                    <div class="quota-box" onclick="handleBoxClick('food')" role="listitem" tabindex="0"
+                        onkeypress="if(event.key==='Enter')handleBoxClick('food')" aria-label="מזון - פטורים ואיסורים">
                         <div class="quota-box-inner">
                             <div class="box-front">
                                 <div class="icon-circle" aria-hidden="true">🍏</div>
@@ -240,9 +241,9 @@
                     </div>
 
                     <!-- 6. Clothes -->
-                    <div class="quota-box" onclick="handleBoxClick('clothes')" 
-                         role="listitem" tabindex="0" onkeypress="if(event.key==='Enter')handleBoxClick('clothes')"
-                         aria-label="הלבשה - פטורים ואיסורים">
+                    <div class="quota-box" onclick="handleBoxClick('clothes')" role="listitem" tabindex="0"
+                        onkeypress="if(event.key==='Enter')handleBoxClick('clothes')"
+                        aria-label="הלבשה - פטורים ואיסורים">
                         <div class="quota-box-inner">
                             <div class="box-front">
                                 <div class="icon-circle" aria-hidden="true">👕</div>
@@ -264,34 +265,36 @@
                 </div>
             </section>
 
-        <!-- Warning - Red path -->
-        <div class="red-path-warning delay-3">
-            <h4>🔴 חריגה? עוברים רק באדום!</h4>
-            <p><strong>כל חריגה</strong> מהכמות המותרת (אפילו בקבוק טיפה יותר גדול או פאקט נוסף) מצריכה הצהרה ומעבר
-                ב<strong>מסלול האדום</strong> במכס.<br>מעבר במסלול הירוק עם חריגות עלול לגרור החרמה של הטובין וקנס כספי
-                גבוה!</p>
-        </div>
-
-        <!-- Cash warning -->
-        <div class="card warning-box delay-4">
-            <div class="warning-icon">🚨</div>
-            <div class="warning-text">
-                <h3>נכנסים עם כסף מזומן?</h3>
-                <p>חובה לדווח לפקיד המכס על סכום העולה על <span class="highlight-red">50,000 ₪</span>.</p>
-                <p style="font-size: 11px; margin-top: 4px; color: #9B2C2C;">(במעבר יבשתי: חובת דיווח מעל 12,000 ₪, למעט
-                    מעבר אלנבי)</p>
+            <!-- Warning - Red path -->
+            <div class="red-path-warning delay-3">
+                <h4>🔴 חריגה? עוברים רק באדום!</h4>
+                <p><strong>כל חריגה</strong> מהכמות המותרת (אפילו בקבוק גדול יותר או פאקט נוסף) מצריכה הצהרה ומעבר
+                    ב<strong>מסלול האדום</strong> במכס.<br>מעבר במסלול הירוק עם חריגות עלול לגרור החרמה של הטובין וקנס
+                    כספי
+                    גבוה!</p>
             </div>
-        </div>
 
-        <div class="disclaimer delay-4" style="animation-delay: 0.5s;">
-            המידע מוגש לנוחותכם ואינו מחליף את לשון החוק המלא
-        </div>
+            <!-- Cash warning -->
+            <div class="card warning-box delay-4">
+                <div class="warning-icon">🚨</div>
+                <div class="warning-text">
+                    <h3>נכנסים עם כסף מזומן?</h3>
+                    <p>חובה לדווח לפקיד המכס על סכום העולה על <span class="highlight-red">50,000 ₪</span>.</p>
+                    <p style="font-size: 11px; margin-top: 4px; color: #9B2C2C;">(במעבר יבשתי: חובת דיווח מעל 12,000 ₪,
+                        למעט
+                        מעבר אלנבי)</p>
+                </div>
+            </div>
 
-        <!-- Action button -->
-        <a href="https://www.gov.il/BlobFolder/guide/customs-guide-for-returning-traveler/he/Guides_customs_Guides_customsreturningpassanger_new.pdf"
-            class="action-btn delay-4" style="animation-delay: 0.6s;" target="_blank">
-            📖 למדריך המכס המלא (PDF)
-        </a>
+            <div class="disclaimer delay-4" style="animation-delay: 0.5s;">
+                המידע מוגש לנוחותכם ואינו מחליף את לשון החוק המלא
+            </div>
+
+            <!-- Action button -->
+            <a href="https://www.gov.il/BlobFolder/guide/customs-guide-for-returning-traveler/he/Guides_customs_Guides_customsreturningpassanger_new.pdf"
+                class="action-btn delay-4" style="animation-delay: 0.6s;" target="_blank">
+                📖 למדריך המכס המלא (PDF)
+            </a>
     </div>
 
     <!-- Customs Chatbot -->
