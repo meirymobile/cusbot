@@ -285,10 +285,10 @@ function setViewMode(mode) {
             cycleBtn.innerText = "🟢 " + modeLabel;
         } else if (mode === 'conditional') {
             modeLabel = "יבוא מותנה";
-            nextMode = "פריטים אסורים / מוגבלים";
+            nextMode = "פריטים אסורים";
             cycleBtn.innerText = "⚠️ " + modeLabel;
         } else if (mode === 'prohibited') {
-            modeLabel = "פריטים אסורים / מוגבלים";
+            modeLabel = "פריטים אסורים";
             nextMode = "פריטים פטורים";
             cycleBtn.innerText = "🔴 " + modeLabel;
         }
