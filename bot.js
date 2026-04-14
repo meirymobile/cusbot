@@ -78,33 +78,33 @@ const modalData = {
     'weapons': {
         icon: '🔫',
         title: 'נשק ותחמושת',
-        body: `איסור ייבוא נשק, תחמושת וחומרים נפצים ללא היתר מיוחד מהמשרד לביטחון לאומי וצה"ל.
+        body: `איסור ייבוא נשק, תחמושת וחומרים נפיצים ללא היתר מיוחד מהמשרד לביטחון לאומי וצה"ל.
             <ul>
-                <li>נשק קר (סכינים, אגרופנים) מסוימים גם הם אסורים.</li>
-                <li>צעצועים הנראים כנשק אמיתי עלולים להיחשב כאסורים.</li>
+                <li><strong>נשק קר:</strong> סכינים, אגרופנים וכלי תקיפה אחרים אסורים גם הם.</li>
+                <li><strong>חיקויים:</strong> צעצועים הנראים כנשק אמיתי עלולים להיחשב כאסורים.</li>
             </ul>`
     },
-    'drugs': {
+    'dangerousDrugs': {
         icon: '💉',
-        title: 'סמים וחומרים מסוכנים',
-        body: `איסור גורף על ייבוא סמים מסוכנים.
+        title: 'סמים מסוכנים',
+        body: `איסור גורף על ייבוא סמים מסוכנים המופיעים בפקודת הסמים.
             <ul>
-                <li>כולל קנאביס (גם רפואי) ללא היתר משרד הבריאות.</li>
-                <li>חומרים פסיכואקטיביים .</li>
+                <li><strong>קנאביס:</strong> כולל קנאביס רפואי ללא היתר פרטני ממשרד הבריאות.</li>
+                <li><strong>ענישה:</strong> עבירות סמים גוררות הליכים פליליים חמורים.</li>
             </ul>`
     },
-    'transmitters': {
-        icon: '📻',
-        title: 'מכשירי שידור וקשר',
-        body: `ייבוא מכשירי קשר, רחפנים מסוימים וציוד תקשורת דורש אישור של משרד התקשורת.
+    'drugTools': {
+        icon: '🏺',
+        title: 'כלים לשימוש בסם',
+        body: `על פי פקודת הסמים המסוכנים, חל איסור מוחלט על ייבוא כלים המיועדים לשימוש בסמים.
             <ul>
-                <li>ציוד שאינו עומד בתקן הישראלי עלול לחסום תדרים חירום ולכן יוחרם.</li>
+                <li><strong>פריטים:</strong> כולל באנגים, מקטרות ייעודיות וכל כלי שעיקר שימושו הוא לצריכת סם מסוכן.</li>
             </ul>`
     },
     'plants': {
         icon: '🌱',
         title: 'צמחים וזרעים',
-        body: `חל איסור מוחלט על הכנסת חומר צמחי (שתילים, זרעים, פקעות) ללא היתר ייבוא ותעודת בריאות מהמדינה המקורית.
+        body: `חל איסור מוחלט על הכנסת חומר צמחי (שתילים, זרעים, פקעות) ללא היתר ייבוא ותעודת בריאות ממשרד החקלאות.
             <ul>
                 <li>מטרת האיסור: מניעת חדירת מזיקים ומחלות לצמחייה בישראל.</li>
             </ul>`
@@ -112,18 +112,17 @@ const modalData = {
     'meat': {
         icon: '🥩',
         title: 'מוצרי בשר ומוצרים מהחי',
-        body: `איסור על ייבוא מוצרי בשר (טריים או מעובדים) ומוצרי חלב מחו"ל (למעט שימורים מסוימים).
+        body: `איסור על ייבוא מוצרי בשר (טריים, מעובדים או בואקום) ומוצרי חלב מחו"ל (למעט שימורים מסוימים).
             <ul>
-                <li>משרד החקלאות מחרים מוצרים אלו למניעת מחלות בעלי חיים.</li>
+                <li>משרד החקלאות מחרים מוצרים אלו למניעת מחלות בעלי חיים וסיכונים בריאותיים.</li>
             </ul>`
     },
-    'electrical': {
-        icon: '🔌',
-        title: 'מכשירי חשמל ותקינה',
-        body: `ייבוא מכשירי חשמל המחויבים בעמידה במבחני בטיחות ודרישות מכון התקנים הישראלי.
+    'produce': {
+        icon: '🍏',
+        title: 'פירות וירקות טריים',
+        body: `חל איסור מוחלט על הכנסת פירות וירקות טריים לישראל.
             <ul>
-                <li>מכשירים שאינם עומדים בדרישות התקינה או הבטיחות עלולים להיעצר במכס לצורך בדיקה או להישלח חזרה לחו"ל.</li>
-                <li><strong>💡 דגש:</strong> ייבוא אישי של מכשיר חשמל נכלל בתוך תקרת הפטור של $200 (למעט הלבשה והנעלה לשימוש עצמי).</li>
+                <li><strong>החרמה:</strong> גם כמויות קטנות לשימוש עצמי יוחרמו בכניסה לארץ כדי למנוע חדירת מזיקים חקלאיים.</li>
             </ul>`
     },
     // --- Conditional Approval Items (Official Regs) ---
@@ -217,7 +216,7 @@ function openModal(type) {
     const footerNote = document.getElementById('modalFooterNote');
 
     // Item Groups for Footer Logic
-    const prohibitedIds = ['weapons', 'drugs', 'transmitters', 'plants', 'meat', 'electrical'];
+    const prohibitedIds = ['weapons', 'dangerousDrugs', 'drugTools', 'plants', 'meat', 'produce'];
     const conditionalIds = ['drones', 'autoParts', 'laser', 'helmets', 'wireless', 'electricVehicles'];
 
     if (prohibitedIds.includes(type)) {
@@ -306,8 +305,8 @@ function setViewMode(mode) {
 function handleBoxClick(type) {
     if (currentViewMode === 'prohibited') {
         const prohibitedMap = {
-            'alcohol': 'weapons', 'tobacco': 'drugs', 'vape': 'transmitters',
-            'perfume': 'plants', 'food': 'meat', 'clothes': 'electrical'
+            'alcohol': 'weapons', 'tobacco': 'dangerousDrugs', 'vape': 'drugTools',
+            'perfume': 'plants', 'food': 'meat', 'clothes': 'produce'
         };
         openModal(prohibitedMap[type]);
     } else if (currentViewMode === 'conditional') {
