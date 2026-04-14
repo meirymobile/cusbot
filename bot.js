@@ -127,10 +127,10 @@ const modalData = {
                 <li><strong>החרמה:</strong> גם כמויות קטנות לשימוש עצמי יוחרמו בכניסה לארץ כדי למנוע חדירת מזיקים חקלאיים.</li>
             </ul>`
     },
-    // --- Conditional Approval Items (Official Regs) ---
     'drones': {
         icon: '🚁',
         title: 'רחפנים וציוד טיסה',
+        link: 'https://www.gov.il/he/service/personal_import_wireless_equipment_license',
         body: `ייבוא רחפנים מותנה באישור משרד התקשורת (פטור ניתן רק לדגמים ברשימה המאושרת) ורשות התעופה האזרחית.
             <ul>
                 <li><strong>תדרים:</strong> חובה לוודא תדרים מותרים (2.4GHz או 5.8GHz בלבד).</li>
@@ -143,6 +143,7 @@ const modalData = {
     'autoParts': {
         icon: '⚙️',
         title: 'חלקי חילוף לרכב',
+        link: 'https://www.gov.il/he/departments/guides/import_car_parts',
         body: `ייבוא חלקי חילוף מותנה ב"צו יבוא חופשי" של משרד התחבורה.
             <ul>
                 <li><strong>חלקי בטיחות:</strong> (בלמים, היגוי, תאורה) דורשים אישור משרד התחבורה ובדיקה של בוחן.</li>
@@ -152,6 +153,7 @@ const modalData = {
     'laser': {
         icon: '🔴',
         title: 'מכשירי לייזר',
+        link: 'https://www.gov.il/he/departments/units/personal_import',
         body: `על פי פקודת המכס וצו הגנת הצרכן, ייבוא צייני לייזר מוגבל.
             <ul>
                 <li><strong>עוצמה:</strong> חל איסור על ייבוא לייזרים בעוצמה שמעל 1 מיליוואט (mW) ללא אישור משרד הכלכלה.</li>
@@ -161,6 +163,7 @@ const modalData = {
     'helmets': {
         icon: '🪖',
         title: 'קסדות מגן',
+        link: 'https://www.gov.il/he/departments/guides/import_car_parts',
         body: `קסדות לאופנועים ולרכיבה מותנות בעמידה בתקני בטיחות בינלאומיים (כגון DOT או ECE 22.05).
             <ul>
                 <li><strong>בדיקה:</strong> קסדה ללא תו תקן ברור עלולה להיעצר לבדיקת מעבדה של מכון התקנים.</li>
@@ -169,6 +172,7 @@ const modalData = {
     'wireless': {
         icon: '📶',
         title: 'ציוד אלחוטי ותקשורת',
+        link: 'https://www.gov.il/he/service/personal_import_wireless_equipment_license',
         body: `מכשירי שידור, מוניטורים לתינוק, נתבים (Routers) עוצמתיים וציוד קצה אחר.
             <ul>
                 <li><strong>אישור:</strong> מחויב באישור של משרד התקשורת כדי לוודא שאינו חוסם תדרים חיוניים.</li>
@@ -177,6 +181,7 @@ const modalData = {
     'electricVehicles': {
         icon: '🛴',
         title: 'קורקינטים ואופניים חשמליים',
+        link: 'https://www.gov.il/he/departments/guides/import_car_parts',
         body: `ייבוא אישי של כלים חשמליים מותנה בעמידה בתקנים מחמירים (ת"י 6116):
             <ul>
                 <li><strong>מהירות:</strong> עד 25 קמ"ש בלבד.</li>
@@ -236,6 +241,15 @@ function openModal(type) {
         footerNote.style.color = '#C53030';
         footerNote.style.background = '#FFF5F5';
         footerNote.style.border = '1px dashed #FC8181';
+    }
+
+    if (data.link) {
+        footerNote.innerHTML += `
+            <div style="margin-top: 15px;">
+                <a href="${data.link}" target="_blank" class="modal-link-btn">
+                    🌐 למידע והוצאת אישור - אתר הממשלה
+                </a>
+            </div>`;
     }
 
     modal.classList.add('active');
