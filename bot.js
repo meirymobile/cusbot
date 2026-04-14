@@ -285,10 +285,10 @@ function setViewMode(mode) {
             cycleBtn.innerText = "🟢 " + modeLabel;
         } else if (mode === 'conditional') {
             modeLabel = "יבוא מותנה";
-            nextMode = "פריטים אסורים";
+            nextMode = "פריטים אסורים / מוגבלים";
             cycleBtn.innerText = "⚠️ " + modeLabel;
         } else if (mode === 'prohibited') {
-            modeLabel = "פריטים אסורים";
+            modeLabel = "פריטים אסורים / מוגבלים";
             nextMode = "פריטים פטורים";
             cycleBtn.innerText = "🔴 " + modeLabel;
         }
@@ -300,7 +300,7 @@ function setViewMode(mode) {
     if (sectionTitle) {
         if (mode === 'exempt') sectionTitle.innerText = "✨ כמויות פטורות ממס";
         else if (mode === 'conditional') sectionTitle.innerText = "⚠️ יבוא מותנה באישור";
-        else if (mode === 'prohibited') sectionTitle.innerText = "🚫 פריטים אסורים בייבוא";
+        else if (mode === 'prohibited') sectionTitle.innerText = "🚫 פריטים אסורים / מוגבלים ביבוא";
     }
 }
 
