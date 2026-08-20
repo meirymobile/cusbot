@@ -2,46 +2,35 @@ const modalData = {
     'alcohol': {
         icon: '🍷',
         title: 'משקאות אלכוהוליים / יינות',
-        body: `הפטור ממס ניתן לנוסע אחד מעל גיל 18 במגבלות ההבאות:
+        body: `הפטור הינו לנוסע מעל גיל 18 במגבלות ההבאות:
             <ul>
                 <li><strong>משקה חריף (ויסקי/וודקה כו'):</strong> עד 1 ליטר בלבד.</li>
                 <li><strong>יין:</strong> עד 2 ליטר בלבד.</li>
             </ul>
             <div class="example-box">
                 <strong>💡 דוגמה:</strong><br>
-                אם הבאתם 3 בקבוקי יין, חרגתם בבקבוק אחד ויש לעבור במסלול האדום. לא ניתן להביא "קצת יותר" ללא הצהרה! 
+                אם הבאתם כמות יין של 3 ליטר, חרגתם מהכמות המותרת ויש לעבור במסלול האדום. לא ניתן להביא "קצת יותר" ללא הצהרה! 
             </div>`
     },
     'tobacco': {
         icon: '🚬',
-        title: 'מוצרי טבק וסיגריות',
-        body: `הפטור ניתנת לנוסע מעל גיל 18:
+        title: 'טבק, סיגריות וסיגריות אלקטרוניות',
+        body: `הפטור ניתן לנוסע מעל גיל 18. <strong>שימו לב: הפטור מאפשר להביא פריט אחד בלבד מהרשימה הבאה (לא ניתן להביא גם וגם!):</strong>
             <ul>
-                <li><strong>סיגריות:</strong> "פאקט" אחד בלבד (מוגבל עד 200 סיגריות בודדות בכל הפאקט).</li>
-                <li><strong>מוצרי טבק אחרים (כגון טבק לגלגול או סיגרים):</strong> במשקל כולל של עד 250 גרם.</li>
+                <li><strong>סיגריות רגילות:</strong> "פאקט" אחד בלבד (מוגבל עד 200 סיגריות בודדות בכל הפאקט).</li>
+                <li><strong>מוצרי טבק אחרים (לגלגול/סיגרים):</strong> עד 250 גרם.</li>
+                <li><strong>סיגריות אלקטרוניות חד פעמיות (Vape):</strong> עד 5 יחידות.</li>
+                <li><strong>נוזל מילוי לסיגריה אלקטרונית:</strong> עד 10 מ"ל.</li>
             </ul>
             <div class="example-box">
-                <strong>💡 דוגמה:</strong><br>
-                נוסע שהביא פאקט סיגריות (200 יח') <strong>ובנוסף</strong> קנה עוד קופסה קטנה – עבר את המכסה המותרת וחייב מעבר במסלול האדום!
-            </div>`
-    },
-    'vape': {
-        icon: '<img src="vape-icon.png" alt="vape" style="width: 40px; height: 40px; object-fit: contain;">',
-        title: 'סיגריות אלקטרוניות',
-        body: `נוסע אחד (מעל גיל 18) רשאי להכניס:
-            <ul>
-                <li><strong>סיגריות חד פעמיות (Vape):</strong> עד 5 יחידות לנוסע.</li>
-                <li><strong>נוזל מילוי:</strong> בנפח של עד 10 מ"ל במצטבר לכל הבקבוקונים.</li>
-            </ul>
-            <div class="example-box">
-                <strong>💡 דוגמה:</strong><br>
-                מי שהביא איתו 6 סיגריות חד-פעמיות או בקבוק נוזל של 30 מ"ל נדרש להצהיר עליהם במסלול האדום ולשלם מס כחוק.
+                <strong>💡 שימו לב:</strong><br>
+                על פי חוק, מותר להכניס לישראל רק <strong>מוצרי טבק ועישון</strong> הנושאים את אזהרות משרד הבריאות בעברית. ההחרגה היחידה היא למוצרים המובאים <strong>במסגרת הפטור האישי בלבד</strong> (למשל פאקט בודד). כל חריגה מהכמות הפטורה אסורה, כיוון שאינה עומדת בדרישות הסימון!
             </div>`
     },
     'perfume': {
         icon: '✨',
-        title: 'בשמים וקוסמטיקה',
-        body: `הפטור ממס ניתן לנוסע:
+        title: 'בשמים',
+        body: `הפטור ממס ניתן לנוסע (מגיל שנתיים ומעלה):
             <ul>
                 <li><strong>תמרוקים כוהליים (בשמים):</strong> עד 1/4 ליטר (250 מ"ל) לנוסע.</li>
                 <li><strong>מוצרי קוסמטיקה אחרים:</strong> נכללים במכסת ה-$200 הכללית.</li>
@@ -62,16 +51,28 @@ const modalData = {
     },
     'food': {
         icon: '🍏',
-        title: 'מזון, תבלינים ותוצרת חקלאית',
+        title: 'צרכי מזון',
         body: `במסגרת פטור ה-200$, ניתן להביא מזון בתנאים הבאים:
             <ul>
-                <li><strong>מזון יבש/מעובד:</strong> עד 3 ק"ג סך הכל.</li>
-                <li><strong>הגבלת סוג:</strong> עד 1 ק"ג לכל סוג מזון בודד.</li>
+                <li><strong>מזון יבש / מעובד:</strong> עד 3 ק"ג סך הכל, ולא יותר מ-1 ק"ג מכל סוג מזון.</li>
                 <li><strong>תוצרת טרייה:</strong> חל איסור מוחלט על פירות, ירקות וצמחים חיים!</li>
             </ul>
             <div class="example-box">
-                <strong>💡 דוגמה:</strong><br>
-                מותר להביא 1 ק"ג שוקולד + 1 ק"ג פסטה + 1 ק"ג אגוזים. אבל אם תביאו 2 ק"ג מאותו סוג, עברתם את המכסה המותרת.
+                <strong>⚠️ חוקיות ייבוא:</strong><br>
+                ייבוא המזון כפוף להוראות משרד הכלכלה. למידע נוסף ניתן לבדוק ב<a href="https://www.gov.il/he/pages/faq_personal_import" target="_blank" style="color:var(--accent-blue);">אתר משרד הכלכלה</a>.
+            </div>`
+    },
+    'exemption200': {
+        icon: '💵',
+        title: 'פטור אישי עד $200',
+        body: `כל פריט שאינו נכלל בקטגוריות האחרות (למשל אלקטרוניקה, צעצועים, פריטי הלבשה שאינם לשימוש עצמי) - נכנס תחת פטור זה!
+            <ul>
+                <li><strong>סכום:</strong> עד 200$ לאדם.</li>
+                <li><strong>כלל איחוד פטורים:</strong> הפטור הינו אישי ולא ניתן לצרף פטורים של מספר נוסעים כדי להביא מוצר אחד יקר.</li>
+            </ul>
+            <div class="example-box">
+                <strong>💡 שימו לב:</strong><br>
+                אם הבאתם מוצר שערכו מעל 200$, תצטרכו לשלם את מלוא המיסים על <strong>כל ערכו</strong> ולא רק על ההפרש.
             </div>`
     },
     // --- Prohibited Items Modal Data ---
@@ -321,16 +322,16 @@ function setViewMode(mode) {
 function handleBoxClick(type) {
     if (currentViewMode === 'prohibited') {
         const prohibitedMap = {
-            'alcohol': 'weapons', 'tobacco': 'dangerousDrugs', 'vape': 'dairyAndFormula',
+            'alcohol': 'weapons', 'tobacco': 'dangerousDrugs',
             'perfume': 'plants', 'food': 'meat', 'clothes': 'produce'
         };
-        openModal(prohibitedMap[type]);
+        openModal(prohibitedMap[type] || type);
     } else if (currentViewMode === 'conditional') {
         const conditionalMap = {
-            'alcohol': 'drones', 'tobacco': 'autoParts', 'vape': 'laser',
+            'alcohol': 'drones', 'tobacco': 'autoParts',
             'perfume': 'helmets', 'food': 'wireless', 'clothes': 'electricVehicles'
         };
-        openModal(conditionalMap[type]);
+        openModal(conditionalMap[type] || type);
     } else {
         openModal(type);
     }
